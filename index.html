@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protection Check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF5EC; --paper-deep:#F1E9DA; --ink:#22303A; --ink-soft:#5B6B72;
+    --clay:#B15E3B; --clay-deep:#8E4A2E; --teal:#2B4742; --teal-deep:#1C332F;
+    --line:#DED0BC; --sage:#8C9A7E; --card:#FFFFFF;
+    --green:#5C8A66; --green-bg:#EAF3EA; --amber:#C08A2E; --amber-bg:#FBF1DC; --red:#B84B3E; --red-bg:#FBEAE6; --gray:#9AA6A0; --gray-bg:#F0EEE9;
+    --radius:18px; --shadow: 0 1px 2px rgba(34,48,58,0.04), 0 8px 24px rgba(34,48,58,0.06);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background: radial-gradient(1200px 600px at 50% -10%, var(--paper-deep), var(--paper) 60%); color:var(--ink); font-family:'Inter',system-ui,sans-serif; -webkit-font-smoothing:antialiased; min-height:100vh; }
+  h1,h2,h3,.display{ font-family:'Fraunces',serif; font-weight:500; letter-spacing:-0.01em; line-height:1.15; color:var(--teal-deep); }
+  .app{ max-width:600px; margin:0 auto; padding:28px 20px 60px; min-height:100vh; display:flex; flex-direction:column; }
+  .app.wide{ max-width:920px; }
+  .eyebrow{ font-size:12px; text-transform:uppercase; letter-spacing:0.14em; font-weight:600; color:var(--clay-deep); margin:0 0 10px; }
+  a{color:inherit;}
+  button{font-family:inherit;}
+  .btn{ appearance:none; border:none; cursor:pointer; border-radius:999px; padding:14px 26px; font-size:15px; font-weight:600; font-family:'Inter',sans-serif; transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease; }
+  .btn:active{ transform:scale(0.98); }
+  .btn-primary{ background:var(--clay); color:#fff; box-shadow:0 6px 16px rgba(177,94,59,0.28); }
+  .btn-primary:hover{ background:var(--clay-deep); }
+  .btn-primary:disabled{ background:#CBB9A6; box-shadow:none; cursor:not-allowed; }
+  .btn-ghost{ background:transparent; color:var(--teal-deep); border:1.5px solid var(--line); }
+  .btn-ghost:hover{ border-color:var(--teal-deep); }
+  .btn-text{ background:none; color:var(--ink-soft); padding:8px 4px; font-weight:500; text-decoration:underline; text-underline-offset:3px; }
+  .btn-sm{ padding:8px 14px; font-size:13px; border-radius:8px; }
+
+  .brandmark{ display:flex; align-items:center; gap:10px; margin-bottom:34px; }
+  .brandmark .dot{ width:10px; height:10px; border-radius:50%; background:var(--clay); }
+  .brandmark span{ font-size:13px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-soft); }
+  .agent-tag{ font-size:12px; color:var(--teal); background:var(--green-bg); border-radius:999px; padding:4px 10px; display:inline-block; margin-bottom:16px; }
+  .headline{ font-size:30px; margin:0 0 6px; }
+  .headline2{ font-size:20px; margin:0 0 16px; color:var(--teal); font-weight:500; }
+  .sub{ font-size:15px; color:var(--ink-soft); line-height:1.65; margin:0 0 26px; max-width:48ch; }
+  .cta-row{ display:flex; flex-direction:column; gap:12px; align-items:flex-start; margin-bottom:30px; }
+  .reassure{ list-style:none; padding:0; margin:0 0 36px; display:flex; flex-direction:column; gap:10px; }
+  .reassure li{ display:flex; gap:10px; font-size:14px; color:var(--ink-soft); align-items:flex-start; }
+  .foot-note{ margin-top:auto; padding-top:40px; font-size:12px; color:var(--ink-soft); line-height:1.6; }
+  .foot-note a{ text-decoration:underline; cursor:pointer; }
+  .brand-message{ background:var(--teal-deep); color:#F3EDE1; border-radius:20px; padding:24px 22px; margin-bottom:26px; }
+  .brand-message .display{ color:#F3EDE1; font-size:19px; margin:0 0 6px; }
+  .brand-message p{ margin:0; font-size:13px; color:#C7CFC9; }
+
+  .assess-header{ display:flex; align-items:center; gap:14px; margin-bottom:26px; }
+  .back-btn{ background:none; border:none; cursor:pointer; color:var(--ink-soft); display:flex; align-items:center; padding:6px; border-radius:8px; flex-shrink:0; }
+  .back-btn:hover{ background:var(--paper-deep); }
+  .gauge-track{ flex:1; height:6px; border-radius:4px; background:var(--line); overflow:hidden; }
+  .gauge-fill{ height:100%; background:linear-gradient(90deg, var(--clay), var(--sage)); border-radius:4px; transition:width .4s ease; }
+  .q-card{ background:var(--card); border:1px solid var(--line); border-radius:22px; padding:28px 22px; box-shadow:var(--shadow); }
+  .q-eyebrow{ font-size:12px; color:var(--clay-deep); font-weight:600; letter-spacing:0.06em; text-transform:uppercase; margin:0 0 10px;}
+  .q-title{ font-size:22px; margin:0 0 8px; }
+  .q-hint{ font-size:14px; color:var(--ink-soft); margin:0 0 22px; }
+  .opt-grid{ display:flex; flex-direction:column; gap:10px; margin-bottom:8px; }
+  .opt{ text-align:left; border:1.5px solid var(--line); background:var(--paper); border-radius:14px; padding:15px 16px; cursor:pointer; font-size:15px; color:var(--ink); display:flex; align-items:center; justify-content:space-between; gap:10px; transition:border-color .15s ease, background .15s ease; }
+  .opt:hover{ border-color:var(--clay); }
+  .opt.selected{ border-color:var(--clay); background:#FBEFE6; }
+  .opt.disabled{ opacity:0.45; cursor:not-allowed; }
+  .opt .check{ width:18px; height:18px; border-radius:50%; border:1.5px solid var(--line); flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  .opt.selected .check{ border-color:var(--clay); background:var(--clay); }
+  .opt.selected .check svg{ display:block; }
+  .opt .check svg{ display:none; }
+  .multi-hint{ font-size:12px; color:var(--ink-soft); margin:12px 0 0; text-align:center; }
+  .field{ width:100%; padding:14px 16px; border:1.5px solid var(--line); border-radius:12px; font-size:16px; font-family:'Inter',sans-serif; background:var(--paper); color:var(--ink); }
+  .field:focus{ outline:none; border-color:var(--clay); }
+  .field-label{ font-size:13px; color:var(--ink-soft); margin:0 0 8px; display:block; font-weight:500; }
+  .step-actions{ margin-top:24px; }
+  .step-actions .btn{ width:100%; }
+  .consent-box{ display:flex; gap:10px; align-items:flex-start; background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:14px; margin:18px 0; font-size:13px; color:var(--ink-soft); line-height:1.5; }
+  .consent-box input{ margin-top:3px; flex-shrink:0; }
+  .module-tag{ font-size:11px; font-weight:600; color:var(--teal); background:var(--green-bg); border-radius:999px; padding:4px 10px; display:inline-block; margin-bottom:12px; }
+
+  .result-title{ font-size:26px; margin:0 0 4px; }
+  .result-sub{ font-size:14px; color:var(--ink-soft); margin:0 0 24px; }
+  .map-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px; border:1px solid var(--line); border-radius:14px; background:var(--card); margin-bottom:10px; }
+  .map-area{ font-size:14px; font-weight:600; color:var(--ink); }
+  .status-pill{ font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px; white-space:nowrap; }
+  .status-green{ background:var(--green-bg); color:var(--green); }
+  .status-yellow{ background:var(--amber-bg); color:var(--amber); }
+  .status-red{ background:var(--red-bg); color:var(--red); }
+  .status-none{ background:var(--gray-bg); color:var(--gray); }
+  .priority-block{ margin-top:34px; }
+  .priority-card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 18px; margin-bottom:12px; }
+  .priority-card h4{ margin:0 0 12px; font-family:'Fraunces',serif; font-size:17px; color:var(--teal-deep); }
+  .pc-block{ margin-bottom:10px; }
+  .pc-label{ font-size:11px; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; color:var(--clay-deep); margin:0 0 3px; }
+  .pc-text{ margin:0; font-size:13.5px; color:var(--ink-soft); line-height:1.55; }
+  .pc-block.next .pc-text{ color:var(--teal); font-weight:500; }
+
+  .cta-option{ display:block; width:100%; text-align:left; background:var(--card); border:1.5px solid var(--line); border-radius:16px; padding:18px; margin-bottom:12px; cursor:pointer; }
+  .cta-option:hover{ border-color:var(--clay); }
+  .cta-option .cta-emoji{ font-size:20px; margin-bottom:6px; display:block; }
+  .cta-option b{ font-size:15px; display:block; margin-bottom:4px; color:var(--teal-deep); }
+  .cta-option span{ font-size:13px; color:var(--ink-soft); }
+  .cta-option:disabled{ opacity:0.5; cursor:wait; }
+
+  .disclaimer{ text-align:left; font-size:12px; color:var(--ink-soft); background:var(--paper-deep); border-radius:14px; padding:16px 18px; line-height:1.6; margin-top:26px; }
+  .disclaimer b{ color:var(--teal-deep); }
+  .ty-wrap{ text-align:center; padding-top:30px; }
+  .send-note{ font-size:12px; color:var(--amber); margin-top:10px; }
+
+  /* Admin */
+  .admin-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
+  .tabs{ display:flex; gap:8px; margin-bottom:22px; }
+  .tab-btn{ background:var(--card); border:1px solid var(--line); border-radius:999px; padding:8px 16px; font-size:13px; font-weight:600; cursor:pointer; color:var(--ink-soft); }
+  .tab-btn.active{ background:var(--teal-deep); color:#fff; border-color:var(--teal-deep); }
+  table{ width:100%; border-collapse:collapse; background:var(--card); border-radius:14px; overflow:hidden; font-size:13px; box-shadow:var(--shadow); }
+  th,td{ text-align:left; padding:11px 12px; border-bottom:1px solid var(--line); vertical-align:middle; }
+  th{ background:var(--paper-deep); font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); }
+  tr:last-child td{ border-bottom:none; }
+  .table-scroll{ overflow-x:auto; border-radius:14px; margin-bottom:20px;}
+  .pill-active{ background:var(--green-bg); color:var(--green); font-size:11px; padding:3px 9px; border-radius:999px; font-weight:600; }
+  .pill-inactive{ background:var(--gray-bg); color:var(--gray); font-size:11px; padding:3px 9px; border-radius:999px; font-weight:600; }
+  .link-box{ display:flex; align-items:center; gap:8px; }
+  .link-text{ font-size:12px; color:var(--ink-soft); background:var(--paper-deep); padding:5px 9px; border-radius:6px; word-break:break-all; }
+  .admin-note{ font-size:12.5px; color:var(--ink-soft); line-height:1.7; background:var(--paper-deep); border-radius:14px; padding:16px 18px; }
+  .admin-note code{ background:var(--card); padding:1px 5px; border-radius:4px; font-size:12px; }
+  .warn-banner{ background:var(--amber-bg); color:#7a5410; border-radius:12px; padding:12px 14px; font-size:13px; margin-bottom:20px; line-height:1.5; }
+
+  @media (max-width:480px){ .headline{ font-size:25px; } .q-title{ font-size:19px; } .result-title{ font-size:22px; } }
+</style>
+</head>
+<body>
+<div id="app" class="app"></div>
+
+<script>
+/* ============================================================
+   PENGATURAN — EDIT BAGIAN INI SAJA
+   ============================================================
+   1) APPS_SCRIPT_URL: tempel URL Web App dari Google Apps Script
+      (lihat panduan setup). Sebelum diisi, submission tidak
+      akan tersimpan ke Sheet.
+   2) SHEET_URL: (opsional) link Google Sheet leads kamu, supaya
+      tombol "Buka Google Sheet" di panel admin berfungsi.
+   3) AGENTS: daftar advisor. Tambah/hapus di sini.
+      - slug: dipakai di link (?agent=slug), huruf kecil tanpa spasi
+      - whatsapp: format 62..., contoh 6281234567890
+      - active: false untuk menonaktifkan link advisor
+   4) ADMIN_CODE: kode untuk membuka panel admin.
+   ============================================================ */
+const CONFIG = {
+  APPS_SCRIPT_URL: 'TEMPEL_URL_APPS_SCRIPT_DI_SINI',
+  SHEET_URL: '',
+  ADMIN_CODE: 'prudential2026',
+  AGENTS: [
+    { slug: 'vicia', name: 'Vicia', whatsapp: '6281234567890', active: true }
+    // , { slug: 'anin', name: 'Anin', whatsapp: '6281200000000', active: true }
+    // , { slug: 'budi', name: 'Budi', whatsapp: '6281300000000', active: true }
+  ]
+};
+/* ===================== AKHIR PENGATURAN ===================== */
+
+function normalizePhone(raw){ let p=(raw||'').replace(/[^0-9+]/g,''); if(p.startsWith('+62')) p=p.slice(1); else if(p.startsWith('62')){} else if(p.startsWith('0')) p='62'+p.slice(1); else if(p) p='62'+p; return p; }
+
+const ICON_CHECK = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ICON_DOT = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="3" fill="#8C9A7E"/></svg>';
+
+const AREA_ALL = 'Saya ingin melihat semuanya';
+const A_HEALTH='🏥 Kesehatan saya dan keluarga', A_INCOME='❤️ Penghasilan keluarga', A_LIFE='❤️ Keluarga jika saya meninggal',
+      A_CI='🧠 Kondisi finansial jika terkena penyakit kritis', A_EDU='🎓 Masa depan pendidikan anak', A_RETIRE='👵 Masa pensiun';
+
+/* ---------------- Global state ---------------- */
+const app = document.getElementById('app');
+let urlAgentSlug = null;
+let currentAgent = null;
+let activeAgents = CONFIG.AGENTS.filter(a=>a.active);
+
+let view = 'loading';
+let flowIndex = 0;
+let answers = {};
+let chosenFinalIntent = null;
+let resultCache = null;
+
+let adminUnlocked = false;
+let adminTab = 'links';
+
+function wantsAll(a){ return (a.protect_areas||[]).includes(AREA_ALL); }
+function isExisting(a){ return a.user_type==='Saya sudah memiliki asuransi Prudential' || a.user_type==='Saya sudah memiliki asuransi pribadi dari perusahaan lain'; }
+function hasDependents(a){ return (a.family_status && a.family_status!=='Single') || (a.dependents && a.dependents!=='Tidak ada'); }
+function hasHealthProtection(a){ return (a.current_protection||[]).some(x=>['BPJS','Asuransi kesehatan dari kantor','Asuransi kesehatan pribadi'].includes(x)); }
+
+/* ---------------- Modules ---------------- */
+const MODULES = [
+  { key:'health', label:'🏥 Health Protection', areaLabel:'🏥 Health',
+    include: a => wantsAll(a) || (a.protect_areas||[]).includes(A_HEALTH) || hasHealthProtection(a),
+    qs:[
+      {key:'health_source', title:'Saat ini, perlindungan kesehatanmu terutama berasal dari:', type:'single',
+        options:['BPJS','Benefit kantor','Asuransi pribadi','BPJS + asuransi pribadi','BPJS + benefit kantor','Kombinasi beberapa sumber','Belum memiliki perlindungan khusus']},
+      {key:'health_understanding', title:'Seberapa yakin kamu memahami perlindungan kesehatan yang kamu miliki?', type:'single',
+        options:['Sangat memahami manfaat dan batasannya','Cukup memahami','Masih perlu mengecek kembali','Belum pernah melakukan review']}
+    ],
+    compute:(a)=>{ const src=a.health_source; if(!src) return 'none';
+      if(src==='Belum memiliki perlindungan khusus') return 'red';
+      const strong=['Asuransi pribadi','BPJS + asuransi pribadi','Kombinasi beberapa sumber'].includes(src);
+      const understood=['Sangat memahami manfaat dan batasannya','Cukup memahami'].includes(a.health_understanding);
+      if(strong && understood) return 'green';
+      return 'yellow'; },
+    why:'Biaya kesehatan dan rawat inap bisa muncul tiba-tiba dan besar. Perlindungan yang jelas menjaga tabungan keluarga tetap utuh saat itu terjadi.',
+    see:{ red:'Belum terlihat adanya sumber perlindungan kesehatan khusus untuk menghadapi biaya rawat inap.', yellow:'Sudah ada sumber perlindungan kesehatan, namun pemahaman terhadap manfaat dan batasannya masih perlu dilengkapi.' },
+    next:{ red:'Pertimbangkan sumber perlindungan kesehatan apa yang tersedia dan apakah cukup untuk kebutuhan keluarga.', yellow:'Pertimbangkan untuk meninjau kembali manfaat dan batasan perlindungan kesehatan yang sudah dimiliki.' }
+  },
+  { key:'life', label:'❤️ Family Income Protection', areaLabel:'❤️ Family Income',
+    include: a => wantsAll(a) || (a.protect_areas||[]).includes(A_INCOME) || (a.protect_areas||[]).includes(A_LIFE) || hasDependents(a),
+    qs:[
+      {key:'life_survival', title:'Jika penghasilan utama keluarga berhenti, kira-kira berapa lama keluarga bisa tetap memenuhi kebutuhan rutin dengan dana yang tersedia?', type:'single',
+        options:['< 3 bulan','3–6 bulan','6–12 bulan','> 12 bulan']},
+      {key:'life_source', title:'Saat ini sumber perlindungan untuk keluarga jika pencari nafkah meninggal terutama berasal dari:', type:'single',
+        options:['Asuransi jiwa','Aset/investasi','Tabungan/dana tunai','Benefit kantor','Kombinasi beberapa sumber','Belum memiliki persiapan khusus']}
+    ],
+    compute:(a)=>{ if(!a.life_survival) return 'none';
+      if(a.life_source==='Belum memiliki persiapan khusus' || a.life_survival==='< 3 bulan') return 'red';
+      const strong=['Asuransi jiwa','Kombinasi beberapa sumber'].includes(a.life_source);
+      const durable=['> 12 bulan','6–12 bulan'].includes(a.life_survival);
+      if(strong && durable) return 'green';
+      return 'yellow'; },
+    why:'Jika pencari nafkah berhenti menghasilkan income, kebutuhan rutin keluarga tetap berjalan. Perlindungan di area ini menjaga keluarga tetap stabil.',
+    see:{ red:'Ketahanan finansial keluarga terlihat terbatas jika penghasilan utama tiba-tiba berhenti.', yellow:'Sudah ada gambaran ketahanan finansial keluarga, namun durasinya atau sumbernya mungkin masih perlu diperkuat.' },
+    next:{ red:'Pertimbangkan apakah ada perlindungan penghasilan yang bisa menjembatani periode tanpa income.', yellow:'Pertimbangkan untuk meninjau kembali kecukupan perlindungan penghasilan keluarga saat ini.' }
+  },
+  { key:'ci', label:'🧠 Critical Illness Protection', areaLabel:'🧠 Critical Illness',
+    include: a => wantsAll(a) || (a.protect_areas||[]).includes(A_CI),
+    qs:[
+      {key:'ci_readiness', title:'Jika kamu harus berhenti bekerja selama 1–2 tahun karena penyakit serius, seberapa siap kondisi finansial keluargamu?', type:'single',
+        options:['Sangat siap','Cukup siap','Kurang siap','Belum siap']},
+      {key:'ci_protection', title:'Saat ini kamu memiliki persiapan khusus untuk menghadapi risiko penyakit kritis?', type:'single',
+        options:['Asuransi penyakit kritis','Benefit kantor','Dana pribadi','Kombinasi beberapa sumber','Belum memiliki persiapan khusus']}
+    ],
+    compute:(a)=>{ if(!a.ci_readiness) return 'none';
+      if(a.ci_readiness==='Belum siap' || a.ci_protection==='Belum memiliki persiapan khusus') return 'red';
+      const strong=['Asuransi penyakit kritis','Kombinasi beberapa sumber','Benefit kantor'].includes(a.ci_protection);
+      const ready=['Sangat siap','Cukup siap'].includes(a.ci_readiness);
+      if(strong && ready) return 'green';
+      return 'yellow'; },
+    why:'Penyakit kritis bisa menghentikan kemampuan bekerja selama berbulan-bulan, sementara biaya dan kebutuhan keluarga tetap berjalan.',
+    see:{ red:'Belum terlihat adanya persiapan khusus untuk menghadapi dampak finansial penyakit kritis.', yellow:'Sudah ada sebagian kesiapan, namun belum sepenuhnya menutup risiko penyakit kritis.' },
+    next:{ red:'Review apakah dana pribadi dan perlindungan yang tersedia cukup untuk menghadapi periode tersebut.', yellow:'Pertimbangkan untuk meninjau kembali kecukupan perlindungan penyakit kritis.' }
+  },
+  { key:'education', label:'🎓 Education Planning', areaLabel:'🎓 Education',
+    include: a => wantsAll(a) || (a.protect_areas||[]).includes(A_EDU) || a.family_status==='Menikah dengan anak',
+    qs:[
+      {key:'edu_progress', title:'Sejauh mana kamu sudah menyiapkan dana pendidikan anak?', type:'single',
+        options:['Sudah punya target dan rutin menyiapkan','Sudah mulai menyiapkan tetapi belum memiliki target yang jelas','Belum mulai','Belum pernah menghitung kebutuhan dana pendidikan']},
+      {key:'edu_timing', title:'Kapan kebutuhan dana pendidikan terbesar kemungkinan muncul?', type:'single', options:['SD','SMP','SMA','Kuliah']}
+    ],
+    compute:(a)=>{ if(!a.edu_progress) return 'none';
+      if(a.edu_progress==='Sudah punya target dan rutin menyiapkan') return 'green';
+      if(a.edu_progress==='Belum mulai' || a.edu_progress==='Belum pernah menghitung kebutuhan dana pendidikan') return 'red';
+      return 'yellow'; },
+    why:'Biaya pendidikan naik setiap tahun dan tenggatnya tidak bisa ditunda. Menyiapkan lebih awal membuat bebannya jauh lebih ringan.',
+    see:{ red:'Persiapan dana pendidikan anak terlihat belum dimulai atau belum pernah dihitung kebutuhannya.', yellow:'Sudah mulai menyiapkan dana pendidikan, namun targetnya belum jelas sehingga kecukupannya sulit dipastikan.' },
+    next:{ red:'Pertimbangkan untuk mulai memetakan target dana pendidikan sesuai jenjang yang akan dituju.', yellow:'Pertimbangkan untuk menetapkan target dan proyeksi dana pendidikan yang lebih jelas.' }
+  },
+  { key:'retirement', label:'👵 Retirement Readiness', areaLabel:'👵 Retirement',
+    include: a => wantsAll(a) || (a.protect_areas||[]).includes(A_RETIRE),
+    qs:[
+      {key:'retire_age', title:'Di usia berapa kamu ingin memiliki kebebasan untuk tidak bergantung pada pekerjaan aktif?', type:'single', options:['45','50','55','60','> 60']},
+      {key:'retire_progress', title:'Sejauh mana kamu sudah menyiapkan dana untuk masa pensiun?', type:'single',
+        options:['Sudah punya strategi dan rutin menjalankannya','Sudah mulai tetapi belum punya target yang jelas','Belum mulai','Belum pernah menghitung kebutuhan pensiun']}
+    ],
+    compute:(a)=>{ if(!a.retire_progress) return 'none';
+      if(a.retire_progress==='Sudah punya strategi dan rutin menjalankannya') return 'green';
+      if(a.retire_progress==='Belum mulai' || a.retire_progress==='Belum pernah menghitung kebutuhan pensiun') return 'red';
+      return 'yellow'; },
+    why:'Masa pensiun bisa berlangsung puluhan tahun tanpa penghasilan aktif. Semakin awal disiapkan, semakin ringan yang perlu disisihkan.',
+    see:{ red:'Persiapan dana pensiun terlihat belum dimulai atau belum pernah dihitung kebutuhannya.', yellow:'Sudah ada sebagian persiapan pensiun, namun belum memiliki target yang jelas.' },
+    next:{ red:'Pertimbangkan untuk mulai memetakan kebutuhan dana pensiun sesuai usia target kebebasan finansial.', yellow:'Pertimbangkan untuk menetapkan target dan konsistensi persiapan dana pensiun.' }
+  }
+];
+
+/* ---------------- Flow ---------------- */
+function getOrderedSteps(){
+  const steps = [];
+  if(!urlAgentSlug){
+    steps.push({key:'attrib_yesno', title:'Apakah kamu sudah mendapatkan link ini dari seorang advisor?', type:'single', options:['Ya','Tidak']});
+    if(answers.attrib_yesno === 'Ya'){
+      const names = activeAgents.map(a=>a.name);
+      steps.push({key:'attrib_choose', title:'Pilih advisor kamu', type:'single', options: names.length? names : ['Belum ada advisor terdaftar']});
+    }
+  }
+  steps.push({key:'user_type', title:'Kondisi kamu saat ini yang paling sesuai:', type:'single',
+    options:['Saya sudah memiliki asuransi Prudential','Saya sudah memiliki asuransi pribadi dari perusahaan lain','Saya belum memiliki asuransi pribadi']});
+  steps.push({key:'protect_areas', title:'Apa yang paling ingin kamu lindungi?', hint:'Pilih hingga 3, atau pilih "Saya ingin melihat semuanya".', type:'multi', max:3, exclusive:AREA_ALL,
+    options:[A_HEALTH, A_INCOME, A_LIFE, A_CI, A_EDU, A_RETIRE, AREA_ALL]});
+  steps.push({key:'age', title:'Berapa usia kamu saat ini?', type:'number', placeholder:'Contoh: 30'});
+  steps.push({key:'family_status', title:'Status keluarga kamu saat ini', type:'single', options:['Single','Menikah','Menikah dengan anak']});
+  steps.push({key:'dependents', title:'Jumlah orang yang bergantung secara finansial padamu', type:'single', options:['Tidak ada','1 orang','2 orang','3 orang','4+ orang']});
+  const soloExpense = answers.family_status==='Single' && answers.dependents==='Tidak ada';
+  steps.push({key:'expense', title: soloExpense ? 'Kisaran pengeluaran rutin kamu per bulan?' : 'Kisaran pengeluaran rutin rumah tangga per bulan?', type:'single',
+    options:['< Rp5 juta/bulan','Rp5–10 juta/bulan','Rp10–20 juta/bulan','Rp20–50 juta/bulan','> Rp50 juta/bulan']});
+  steps.push({key:'current_protection', title:'Saat ini kamu sudah memiliki perlindungan atau persiapan apa?', hint:'Boleh pilih lebih dari satu.', type:'multi', exclusive:'Belum memiliki perlindungan khusus',
+    options:['BPJS','Asuransi kesehatan dari kantor','Asuransi kesehatan pribadi','Asuransi jiwa','Perlindungan penyakit kritis','Dana/investasi pendidikan anak','Dana/investasi pensiun','Belum memiliki perlindungan khusus']});
+
+  if(isExisting(answers)){
+    steps.push({key:'last_review', title:'Kapan terakhir kali proteksimu direview secara menyeluruh?', type:'single', options:['< 1 tahun','1–2 tahun','3–5 tahun','> 5 tahun','Belum pernah melakukan review']});
+    steps.push({key:'life_changes', title:'Apa yang berubah sejak kamu memiliki perlindungan tersebut?', hint:'Boleh pilih lebih dari satu.', type:'multi', exclusive:'Tidak ada perubahan signifikan',
+      options:['Menikah','Punya anak','Jumlah tanggungan bertambah','Penghasilan berubah','Pindah pekerjaan','Memiliki utang baru','Kondisi keluarga berubah','Kebutuhan kesehatan berubah','Tidak ada perubahan signifikan']});
+  }
+
+  MODULES.forEach(m => { if(m.include(answers)){ m.qs.forEach(q => steps.push(Object.assign({}, q, {moduleLabel:m.label}))); } });
+  return steps;
+}
+
+/* ---------------- Init ---------------- */
+function init(){
+  const params = new URLSearchParams(location.search);
+  urlAgentSlug = params.get('agent');
+  if(urlAgentSlug){
+    const found = CONFIG.AGENTS.find(a=>a.slug===urlAgentSlug);
+    if(!found || !found.active){ view='linkinvalid'; render(); return; }
+    currentAgent = found;
+  }
+  view = 'landing';
+  render();
+}
+
+function render(){
+  if(view==='linkinvalid') return renderLinkInvalid();
+  if(view==='landing') return renderLanding();
+  if(view==='assessment') return renderAssessment();
+  if(view==='result') return renderResult();
+  if(view==='contact') return renderContact();
+  if(view==='final_cta') return renderFinalCta();
+  if(view==='thankyou') return renderThankYou();
+  if(view==='admin') return renderAdmin();
+}
+
+function renderLinkInvalid(){
+  app.className='app';
+  app.innerHTML = `<div style="padding-top:90px; text-align:center;">
+    <h2 class="display" style="font-size:22px;">Link ini sedang tidak tersedia</h2>
+    <p style="color:var(--ink-soft); font-size:14px; max-width:38ch; margin:14px auto 0; line-height:1.6;">This Protection Check link is currently unavailable. Silakan hubungi advisor kamu untuk mendapatkan link terbaru.</p>
+  </div>`;
+}
+
+/* ---------------- Landing ---------------- */
+function renderLanding(){
+  app.className='app';
+  app.innerHTML = `
+    <div>
+      <div class="brandmark"><span class="dot"></span><span>Protection Check</span></div>
+      ${currentAgent ? `<div class="agent-tag">Dibagikan oleh advisor: ${currentAgent.name}</div>` : ''}
+      <p class="eyebrow">Know what you have. Know what you may need.</p>
+      <h1 class="headline">PROTECTION CHECK</h1>
+      <h2 class="headline2">Seberapa siap kamu menghadapi risiko finansial?</h2>
+      <p class="sub">Kenali posisi proteksi keuanganmu dalam beberapa menit. Lihat apa yang sudah kamu miliki, area mana yang mungkin masih perlu kamu perhatikan, dan apa yang bisa kamu diskusikan lebih lanjut dengan advisor.</p>
+      <div class="cta-row"><button class="btn btn-primary" id="startBtn">Mulai Protection Check</button></div>
+    </div>
+
+    <ul class="reassure">
+      <li>${ICON_DOT}Tidak perlu tahu produk asuransi terlebih dahulu.</li>
+      <li>${ICON_DOT}Tidak perlu langsung bertemu agent.</li>
+      <li>${ICON_DOT}Tidak ada kewajiban membeli.</li>
+    </ul>
+
+    <div class="brand-message">
+      <div class="display">Kenali yang sudah kamu punya.</div>
+      <p>Pahami yang masih perlu kamu siapkan — sebelum bicara dengan siapa pun. Understand first. Decide later.</p>
+    </div>
+
+    <p class="foot-note">Protection Check merupakan alat edukasi dan assessment awal berdasarkan informasi yang diberikan pengguna. Hasil assessment bukan rekomendasi produk, keputusan underwriting, atau jaminan penerimaan asuransi. &nbsp;·&nbsp; <a id="adminLink">Admin</a></p>
+  `;
+  document.getElementById('startBtn').onclick = () => { view='assessment'; flowIndex=0; answers={}; render(); };
+  document.getElementById('adminLink').onclick = () => { view='admin'; render(); };
+}
+
+/* ---------------- Assessment ---------------- */
+function renderAssessment(){
+  const steps = getOrderedSteps();
+  if(flowIndex >= steps.length){ view='result'; render(); return; }
+  const s = steps[flowIndex];
+  const percentDone = Math.round((flowIndex/steps.length)*100);
+  const showNextBtn = s.type==='multi' || s.type==='number';
+
+  app.className='app';
+  app.innerHTML = `
+    <div class="assess-header">
+      <button class="back-btn" id="backBtn" aria-label="Kembali"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12.5 15L7.5 10L12.5 5" stroke="#5B6B72" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gauge-track"><div class="gauge-fill" style="width:${percentDone}%"></div></div>
+    </div>
+    <div class="q-card">
+      ${s.moduleLabel ? `<span class="module-tag">${s.moduleLabel}</span>` : ''}
+      <p class="q-eyebrow">Pertanyaan ${flowIndex+1} dari ${steps.length}</p>
+      <h2 class="q-title">${s.title}</h2>
+      ${s.hint ? `<p class="q-hint">${s.hint}</p>` : ''}
+      <div id="qBody"></div>
+      ${showNextBtn ? `<div class="step-actions"><button class="btn btn-primary" id="nextBtn" disabled>Lanjut</button></div>` : ''}
+    </div>
+  `;
+
+  document.getElementById('backBtn').onclick = () => {
+    if(flowIndex===0){ view='landing'; render(); } else { flowIndex -= 1; render(); }
+  };
+
+  const qBody = document.getElementById('qBody');
+
+  if(s.type==='single'){
+    qBody.innerHTML = `<div class="opt-grid">` + s.options.map(o=>`<button class="opt ${answers[s.key]===o?'selected':''}" data-val="${o}"><span>${o}</span><span class="check">${ICON_CHECK}</span></button>`).join('') + `</div>`;
+    qBody.querySelectorAll('.opt').forEach(btn=>{ btn.onclick = () => { answers[s.key]=btn.dataset.val; goNext(); }; });
+  }
+  if(s.type==='multi'){ renderMultiOptions(s, qBody); }
+  if(s.type==='number'){
+    qBody.innerHTML = `<input class="field" type="number" min="0" max="120" inputmode="numeric" placeholder="${s.placeholder||''}" id="numInput" value="${answers[s.key]||''}">`;
+    const inp = document.getElementById('numInput');
+    inp.addEventListener('input', ()=>{ answers[s.key]=inp.value; updateNextEnabled(s); });
+    setTimeout(()=>inp.focus(),50);
+    updateNextEnabled(s);
+  }
+  const nextBtn = document.getElementById('nextBtn');
+  if(nextBtn) nextBtn.onclick = goNext;
+}
+
+function renderMultiOptions(s, qBody){
+  const cur = answers[s.key] || [];
+  const atMax = s.max && cur.length >= s.max;
+  qBody.innerHTML = `<div class="opt-grid">` + s.options.map(o=>{
+    const selected = cur.includes(o);
+    const isExclusive = s.exclusive===o;
+    const exclusiveActive = s.exclusive && cur.includes(s.exclusive);
+    let disabled = false;
+    if(!selected){
+      if(exclusiveActive && !isExclusive) disabled = true;
+      else if(isExclusive && cur.length>0 && !cur.includes(s.exclusive)) disabled = true;
+      else if(atMax && !isExclusive) disabled = true;
+    }
+    return `<button class="opt ${selected?'selected':''} ${disabled?'disabled':''}" data-val="${o}" ${disabled?'data-disabled="1"':''}><span>${o}</span><span class="check">${ICON_CHECK}</span></button>`;
+  }).join('') + `</div>` + (s.max ? `<p class="multi-hint">Terpilih ${cur.length} dari maksimal ${s.max}</p>` : '');
+
+  qBody.querySelectorAll('.opt').forEach(btn=>{
+    btn.onclick = () => {
+      if(btn.dataset.disabled) return;
+      const val = btn.dataset.val;
+      let arr = answers[s.key] || [];
+      if(s.exclusive){
+        if(val===s.exclusive){ arr = arr.includes(val) ? [] : [val]; }
+        else { arr = arr.filter(x=>x!==s.exclusive); const idx=arr.indexOf(val); if(idx>-1) arr.splice(idx,1); else if(!(s.max && arr.length>=s.max)) arr.push(val); }
+      } else {
+        const idx=arr.indexOf(val); if(idx>-1) arr.splice(idx,1); else if(!(s.max && arr.length>=s.max)) arr.push(val);
+      }
+      answers[s.key]=arr;
+      renderMultiOptions(s, qBody);
+      updateNextEnabled(s);
+    };
+  });
+  updateNextEnabled(s);
+}
+
+function updateNextEnabled(s){
+  const nextBtn = document.getElementById('nextBtn'); if(!nextBtn) return;
+  let ok=false;
+  if(s.type==='multi') ok = (answers[s.key]||[]).length>0;
+  if(s.type==='number') ok = answers[s.key] && parseInt(answers[s.key],10)>0 && parseInt(answers[s.key],10)<120;
+  nextBtn.disabled = !ok;
+}
+
+function goNext(){
+  const steps = getOrderedSteps();
+  flowIndex += 1;
+  if(flowIndex >= steps.length){ view='result'; }
+  render();
+}
+
+/* ---------------- Result ---------------- */
+function computeMap(){ const map={}; MODULES.forEach(m => { map[m.key] = m.include(answers) ? m.compute(answers) : 'none'; }); return map; }
+function computeTop3(map){
+  const order = { red:0, yellow:1 };
+  const candidates = MODULES.filter(m => map[m.key]==='red' || map[m.key]==='yellow');
+  candidates.sort((a,b) => order[map[a.key]] - order[map[b.key]]);
+  return candidates.slice(0,3).map(m => m.key);
+}
+const STATUS_LABEL = { green:'🟢 Relatively Protected', yellow:'🟡 Worth Reviewing', red:'🔴 Needs Attention', none:'⚪ Belum dinilai' };
+const STATUS_CLASS = { green:'status-green', yellow:'status-yellow', red:'status-red', none:'status-none' };
+
+function renderResult(){
+  const map = computeMap();
+  const top3 = computeTop3(map);
+  resultCache = { map, top3 };
+  const shownModules = MODULES.filter(m => map[m.key]!=='none');
+
+  app.className='app';
+  app.innerHTML = `
+    <h2 class="result-title">Your Protection Map</h2>
+    <p class="result-sub">Berdasarkan informasi yang kamu berikan, begini gambaran posisi proteksimu saat ini.</p>
+    ${shownModules.map(m => `
+      <div class="map-row">
+        <span class="map-area">${m.areaLabel}</span>
+        <span class="status-pill ${STATUS_CLASS[map[m.key]]}">${STATUS_LABEL[map[m.key]]}</span>
+      </div>`).join('')}
+
+    <div class="priority-block">
+      <h2 style="font-size:19px; margin:0 0 14px;">Your Top ${top3.length || 0} Areas to Think About</h2>
+      ${top3.length===0 ? `<p style="font-size:14px; color:var(--ink-soft);">Berdasarkan jawabanmu, area-area utama terlihat relatif cukup terjaga. Tetap baik untuk didiskusikan secara berkala dengan advisor.</p>` :
+      top3.map(key => { const m = MODULES.find(x=>x.key===key); const status = map[key];
+        const existingPrefix = (isExisting(answers) && status!=='red') ? 'Kamu sudah memiliki perlindungan di area ini. ' : '';
+        return `<div class="priority-card">
+          <h4>${m.label}</h4>
+          <div class="pc-block"><p class="pc-label">What we see</p><p class="pc-text">${existingPrefix}${m.see[status]}</p></div>
+          <div class="pc-block"><p class="pc-label">Why it matters</p><p class="pc-text">${m.why}</p></div>
+          <div class="pc-block next"><p class="pc-label">Next step</p><p class="pc-text">${(isExisting(answers) && status!=='red') ? 'Yang perlu diperhatikan adalah apakah perlindungan tersebut masih sesuai dengan kondisi keluarga, kebutuhan, dan kemampuan finansialmu saat ini.' : m.next[status]}</p></div>
+        </div>`;
+      }).join('') }
+    </div>
+
+    <div class="step-actions" style="margin-top:10px;"><button class="btn btn-primary" id="continueBtn">Lanjutkan</button></div>
+  `;
+  document.getElementById('continueBtn').onclick = () => { view='contact'; render(); };
+}
+
+/* ---------------- Contact ---------------- */
+function renderContact(){
+  app.className='app';
+  app.innerHTML = `
+    <div class="q-card">
+      <p class="q-eyebrow">Terakhir</p>
+      <h2 class="q-title">Ke mana hasilnya boleh dikirim?</h2>
+      <p class="q-hint">Data ini hanya digunakan untuk menghubungimu terkait hasil Protection Check.</p>
+      <label class="field-label">Nama</label>
+      <input class="field" type="text" id="nameInput" placeholder="Nama lengkap" value="${answers.name||''}" style="margin-bottom:14px;">
+      <label class="field-label">Nomor WhatsApp</label>
+      <input class="field" type="tel" id="waInput" placeholder="08xx xxxx xxxx" value="${answers.whatsapp||''}" style="margin-bottom:14px;">
+      <label class="field-label">Email (opsional)</label>
+      <input class="field" type="email" id="emailInput" placeholder="nama@email.com" value="${answers.email||''}">
+      <div class="consent-box">
+        <input type="checkbox" id="consentBox" ${answers._consent?'checked':''}>
+        <label for="consentBox">Saya bersedia dihubungi terkait hasil Protection Check yang saya isi.</label>
+      </div>
+      <div class="step-actions"><button class="btn btn-primary" id="nextBtn" disabled>Lanjut</button></div>
+    </div>
+  `;
+  const nameInput=document.getElementById('nameInput'), waInput=document.getElementById('waInput'), emailInput=document.getElementById('emailInput'), consentBox=document.getElementById('consentBox'), nextBtn=document.getElementById('nextBtn');
+  function check(){
+    answers.name=nameInput.value; answers.whatsapp=waInput.value; answers.email=emailInput.value; answers._consent=consentBox.checked;
+    nextBtn.disabled = !(nameInput.value.trim() && waInput.value.trim().length>=8 && consentBox.checked);
+  }
+  [nameInput,waInput,emailInput].forEach(el=>el.addEventListener('input',check));
+  consentBox.addEventListener('change',check);
+  check();
+  nextBtn.onclick = () => { view='final_cta'; render(); };
+}
+
+/* ---------------- Final CTA ---------------- */
+function renderFinalCta(){
+  app.className='app';
+  app.innerHTML = `
+    <h2 class="result-title" style="font-size:22px;">Mau memahami hasil Protection Check kamu lebih lanjut?</h2>
+    <p class="result-sub">Kamu yang menentukan langkah berikutnya. Tidak ada tekanan untuk membeli.</p>
+    <button class="cta-option" data-intent="understand"><span class="cta-emoji">🟢</span><b>Saya ingin dibantu memahami hasil saya</b><span>Ngobrol santai lewat WhatsApp dengan advisor.</span></button>
+    <button class="cta-option" data-intent="budget"><span class="cta-emoji">🔵</span><b>Saya ingin tahu estimasi budget untuk menutup potential gap</b><span>Advisor akan menghitungkan lewat sistem resmi perusahaan, lalu menghubungimu.</span></button>
+    <button class="cta-option" data-intent="save"><span class="cta-emoji">⚪</span><b>Saya ingin simpan hasil dulu</b><span>Hasil dikirim ke WhatsApp/email kamu untuk dipelajari sendiri dulu.</span></button>
+    <p id="sendState" class="send-note" style="display:none;"></p>
+  `;
+  app.querySelectorAll('.cta-option').forEach(btn=>{ btn.onclick = () => finalizeSubmission(btn.dataset.intent); });
+}
+
+function statusReadable(code){ return STATUS_LABEL[code] || '-'; }
+
+async function finalizeSubmission(intentKey){
+  chosenFinalIntent = intentKey;
+  const { map, top3 } = resultCache || { map: computeMap(), top3: computeTop3(computeMap()) };
+
+  let agentSlug = '', agentName = 'Tanpa advisor (General)';
+  if(currentAgent){ agentSlug = currentAgent.slug; agentName = currentAgent.name; }
+  else if(answers.attrib_yesno==='Ya' && answers.attrib_choose){
+    const found = activeAgents.find(a=>a.name===answers.attrib_choose);
+    if(found){ agentSlug=found.slug; agentName=found.name; }
+  }
+
+  let priority = 'NURTURE';
+  const staleReview = isExisting(answers) && ['> 5 tahun','3–5 tahun','Belum pernah melakukan review'].includes(answers.last_review);
+  const bigChange = (answers.life_changes||[]).some(x=>x!=='Tidak ada perubahan signifikan');
+  if(intentKey==='budget') priority='HIGH';
+  else if(staleReview && bigChange) priority='HIGH';
+  else if(intentKey==='understand' || isExisting(answers)) priority='WARM';
+
+  const intentReadable = { understand:'Pahami hasil', budget:'Estimasi budget', save:'Simpan dulu' }[intentKey] || intentKey;
+
+  const payload = {
+    timestamp: new Date().toISOString(),
+    agent_name: agentName,
+    agent_slug: agentSlug,
+    name: answers.name || '',
+    whatsapp: normalizePhone(answers.whatsapp),
+    email: answers.email || '',
+    user_type: answers.user_type || '',
+    age: answers.age || '',
+    family_status: answers.family_status || '',
+    dependents: answers.dependents || '',
+    expense: answers.expense || '',
+    protect_areas: (answers.protect_areas||[]).join(', '),
+    current_protection: (answers.current_protection||[]).join(', '),
+    health: statusReadable(map.health),
+    life: statusReadable(map.life),
+    ci: statusReadable(map.ci),
+    education: statusReadable(map.education),
+    retirement: statusReadable(map.retirement),
+    last_review: answers.last_review || '',
+    life_changes: (answers.life_changes||[]).join(', '),
+    intent: intentReadable,
+    priority: priority,
+    top3: top3.map(k => MODULES.find(m=>m.key===k)?.areaLabel).filter(Boolean).join(', ')
+  };
+
+  const buttons = app.querySelectorAll('.cta-option');
+  buttons.forEach(b=>b.disabled=true);
+  const sendState = document.getElementById('sendState');
+  if(sendState){ sendState.style.display='block'; sendState.style.color='var(--ink-soft)'; sendState.textContent='Mengirim data...'; }
+
+  try{
+    if(CONFIG.APPS_SCRIPT_URL && CONFIG.APPS_SCRIPT_URL.indexOf('TEMPEL_URL')===-1){
+      await fetch(CONFIG.APPS_SCRIPT_URL, { method:'POST', body: JSON.stringify(payload) });
+    }
+  }catch(e){ /* network gagal — tetap lanjut supaya user bisa WhatsApp advisor */ }
+
+  view='thankyou'; render();
+}
+
+/* ---------------- Thank you ---------------- */
+function renderThankYou(){
+  const name = answers.name ? answers.name.split(' ')[0] : '';
+  let bodyText;
+  const topAreaNames = (resultCache?.top3||[]).map(k => MODULES.find(m=>m.key===k)?.areaLabel).filter(Boolean).join(', ');
+
+  if(chosenFinalIntent==='budget'){
+    bodyText = `Terima kasih${name?', '+name:''}. Data kebutuhanmu sudah kami terima. Advisor akan menghitungkan estimasi menggunakan sistem resmi perusahaan, lalu menghubungimu melalui WhatsApp.`;
+  } else if(chosenFinalIntent==='save'){
+    bodyText = `Terima kasih${name?', '+name:''}. Hasil Protection Check kamu sudah tersimpan. Kalau nanti ingin melanjutkan atau punya pertanyaan, kamu bisa hubungi advisor kapan pun kamu siap.`;
+  } else {
+    bodyText = `Terima kasih${name?', '+name:''}. Hasil Protection Check kamu sudah kami terima${topAreaNames?', khususnya seputar '+topAreaNames:''}. Advisor akan membantu menjelaskan lebih lanjut.`;
+  }
+
+  let waNumber = null, waAgentName = null;
+  if(currentAgent && currentAgent.whatsapp){ waNumber = currentAgent.whatsapp; waAgentName = currentAgent.name; }
+  else if(answers.attrib_choose){ const found = activeAgents.find(a=>a.name===answers.attrib_choose); if(found && found.whatsapp){ waNumber=found.whatsapp; waAgentName=found.name; } }
+
+  let waButton;
+  if(waNumber){
+    const msg = `Hai${waAgentName?' '+waAgentName.split(' ')[0]:''}, aku baru saja menyelesaikan Protection Check${name?' atas nama '+name:''}. Boleh dibantu jelaskan hasilnya?`;
+    waButton = `<a class="btn btn-primary" href="https://wa.me/${normalizePhone(waNumber)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener" style="display:inline-block; text-decoration:none;">Chat dengan advisor sekarang</a>`;
+  } else {
+    waButton = `<p style="font-size:13px; color:var(--ink-soft);">Advisor tim kami akan menghubungimu melalui nomor WhatsApp yang kamu berikan.</p>`;
+  }
+
+  app.className='app';
+  app.innerHTML = `
+    <div class="ty-wrap">
+      <h2 class="ty-title" style="font-size:24px; margin:0 0 12px;">Protection Check kamu sudah selesai.</h2>
+      <p style="font-size:15px; color:var(--ink-soft); line-height:1.7; max-width:44ch; margin:0 auto 26px;">${bodyText}</p>
+      ${waButton}
+      <div style="margin-top:16px;"><button class="btn btn-text" id="restartBtn">Isi ulang Protection Check</button></div>
+      <div class="disclaimer">
+        <b>Catatan penting.</b> Protection Check merupakan alat edukasi dan assessment awal berdasarkan informasi yang diberikan oleh pengguna. Hasil assessment bukan merupakan rekomendasi produk, keputusan underwriting, jaminan penerimaan asuransi, atau jaminan manfaat tertentu. Informasi premi, manfaat, ketentuan produk, eligibility, dan keputusan penerimaan pertanggungan mengikuti sistem serta ketentuan resmi perusahaan asuransi.
+      </div>
+    </div>
+  `;
+  document.getElementById('restartBtn').onclick = () => { view='landing'; answers={}; flowIndex=0; chosenFinalIntent=null; resultCache=null; render(); };
+}
+
+/* ---------------- Admin (agent links + sheet pointer) ---------------- */
+function renderAdmin(){
+  if(!adminUnlocked){
+    const code = prompt('Masukkan kode akses admin:');
+    if(code !== CONFIG.ADMIN_CODE){ alert('Kode salah.'); view='landing'; render(); return; }
+    adminUnlocked = true;
+  }
+  app.className = 'app wide';
+  app.innerHTML = `
+    <div class="admin-top">
+      <div><p class="eyebrow" style="margin-bottom:4px;">Admin</p><h2 style="margin:0; font-size:22px;">Protection Check — Panel Admin</h2></div>
+      <button class="btn btn-ghost" id="exitAdmin">Kembali ke halaman utama</button>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn ${adminTab==='links'?'active':''}" id="tabLinks">Link Advisor</button>
+      <button class="tab-btn ${adminTab==='sheet'?'active':''}" id="tabSheet">Data Leads</button>
+    </div>
+    <div id="adminBody"></div>
+  `;
+  document.getElementById('exitAdmin').onclick = () => { view='landing'; render(); };
+  document.getElementById('tabLinks').onclick = () => { adminTab='links'; renderAdmin(); };
+  document.getElementById('tabSheet').onclick = () => { adminTab='sheet'; renderAdmin(); };
+
+  const body = document.getElementById('adminBody');
+  if(adminTab==='links') renderLinksTab(body); else renderSheetTab(body);
+}
+
+function baseUrl(){ return location.origin + location.pathname; }
+
+function renderLinksTab(body){
+  const rows = CONFIG.AGENTS.map(a => {
+    const link = baseUrl() + '?agent=' + a.slug;
+    return `<tr>
+      <td>${a.name}</td>
+      <td><span class="${a.active?'pill-active':'pill-inactive'}">${a.active?'Active':'Inactive'}</span></td>
+      <td><div class="link-box"><span class="link-text">${link}</span><button class="btn btn-ghost btn-sm copy-btn" data-link="${link}">Salin</button></div></td>
+    </tr>`;
+  }).join('');
+
+  body.innerHTML = `
+    <div class="table-scroll"><table>
+      <thead><tr><th>Advisor</th><th>Status</th><th>Link untuk dibagikan</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>
+    <div class="admin-note">
+      <b>Menambah/menghapus advisor:</b> buka file <code>index.html</code>, cari bagian <code>CONFIG.AGENTS</code> di paling atas, lalu tambah satu baris advisor. Untuk menonaktifkan link seseorang, ubah <code>active: true</code> menjadi <code>active: false</code>. Simpan &amp; upload ulang ke GitHub.<br><br>
+      Tiap advisor cukup membagikan link mereka masing-masing (di bio Instagram, story, atau chat). Setiap orang yang mengisi lewat link itu otomatis tercatat atas nama advisor tersebut di Google Sheet.
+    </div>
+  `;
+  body.querySelectorAll('.copy-btn').forEach(btn=>{
+    btn.onclick = async () => {
+      try{ await navigator.clipboard.writeText(btn.dataset.link); btn.textContent='Tersalin ✓'; setTimeout(()=>btn.textContent='Salin',1500); }
+      catch(e){ alert('Salin manual: '+btn.dataset.link); }
+    };
+  });
+}
+
+function renderSheetTab(body){
+  body.innerHTML = `
+    <div class="warn-banner">Semua data leads tersimpan di Google Sheet kamu — di sanalah kamu memfilter, memberi catatan, dan mengubah status follow-up. Panel ini hanya pintu menuju ke sana.</div>
+    ${CONFIG.SHEET_URL
+      ? `<a class="btn btn-primary" href="${CONFIG.SHEET_URL}" target="_blank" rel="noopener" style="display:inline-block; text-decoration:none; margin-bottom:20px;">Buka Google Sheet leads</a>`
+      : `<div class="admin-note" style="margin-bottom:20px;">Link Google Sheet belum diisi. Buka file <code>index.html</code>, isi <code>CONFIG.SHEET_URL</code> dengan alamat Google Sheet kamu, lalu upload ulang — tombol "Buka Google Sheet" akan muncul di sini.</div>`}
+    <div class="admin-note">
+      <b>Cara memakai Sheet sebagai dashboard:</b><br>
+      • Filter kolom <b>Agent</b> untuk melihat lead per advisor.<br>
+      • Filter kolom <b>Priority</b> untuk mendahulukan lead 🔥 HIGH.<br>
+      • Gunakan kolom kosong di kanan (mis. "Status" &amp; "Catatan") untuk mencatat progres follow-up secara manual.<br>
+      • Kolom <b>WhatsApp</b> sudah dalam format 62 — tinggal ketik <code>wa.me/</code> diikuti nomornya di browser untuk membuka chat.
+    </div>
+  `;
+}
+
+init();
+</script>
+</body>
+</html>
