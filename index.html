@@ -39,8 +39,9 @@
   .agent-tag{ font-size:12px; color:var(--teal); background:var(--green-bg); border-radius:999px; padding:4px 10px; display:inline-block; margin-bottom:16px; }
   .headline{ font-size:30px; margin:0 0 6px; }
   .headline2{ font-size:20px; margin:0 0 16px; color:var(--teal); font-weight:500; }
-  .sub{ font-size:15px; color:var(--ink-soft); line-height:1.65; margin:0 0 26px; max-width:48ch; }
-  .cta-row{ display:flex; flex-direction:column; gap:12px; align-items:flex-start; margin-bottom:30px; }
+  .sub{ font-size:15px; color:var(--ink-soft); line-height:1.65; margin:0 0 22px; max-width:48ch; }
+  .cta-row{ display:flex; flex-direction:column; gap:12px; align-items:flex-start; margin-bottom:26px; }
+  .urgency-line{ font-size:14px; color:var(--teal); line-height:1.6; margin:0 0 28px; padding:12px 16px; background:var(--card); border:1px solid var(--line); border-left:4px solid var(--clay); border-radius:10px; }
   .reassure{ list-style:none; padding:0; margin:0 0 36px; display:flex; flex-direction:column; gap:10px; }
   .reassure li{ display:flex; gap:10px; font-size:14px; color:var(--ink-soft); align-items:flex-start; }
   .foot-note{ margin-top:auto; padding-top:40px; font-size:12px; color:var(--ink-soft); line-height:1.6; }
@@ -78,14 +79,17 @@
   .module-tag{ font-size:11px; font-weight:600; color:var(--teal); background:var(--green-bg); border-radius:999px; padding:4px 10px; display:inline-block; margin-bottom:12px; }
 
   .result-title{ font-size:26px; margin:0 0 4px; }
-  .result-sub{ font-size:14px; color:var(--ink-soft); margin:0 0 24px; }
+  .result-sub{ font-size:14px; color:var(--ink-soft); margin:0 0 18px; }
+  .urgency-badge{ font-size:14.5px; font-weight:600; color:var(--clay-deep); background:var(--red-bg); border-radius:12px; padding:13px 16px; margin:0 0 22px; line-height:1.5; }
+  .urgency-badge.ok{ color:var(--green); background:var(--green-bg); }
+  .review-note{ font-size:13px; color:var(--teal); background:var(--amber-bg); border-radius:12px; padding:12px 15px; margin:0 0 20px; line-height:1.55; }
   .map-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px; border:1px solid var(--line); border-radius:14px; background:var(--card); margin-bottom:10px; }
   .map-area{ font-size:14px; font-weight:600; color:var(--ink); }
   .status-pill{ font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px; white-space:nowrap; }
   .status-green{ background:var(--green-bg); color:var(--green); }
   .status-yellow{ background:var(--amber-bg); color:var(--amber); }
   .status-red{ background:var(--red-bg); color:var(--red); }
-  .status-none{ background:var(--gray-bg); color:var(--gray); }
+  .single-income-note{ font-size:13.5px; color:var(--teal-deep); background:var(--card); border:1px solid var(--line); border-left:4px solid var(--sage); border-radius:12px; padding:14px 16px; margin:20px 0 0; line-height:1.6; }
   .priority-block{ margin-top:34px; }
   .priority-card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 18px; margin-bottom:12px; }
   .priority-card h4{ margin:0 0 12px; font-family:'Fraunces',serif; font-size:17px; color:var(--teal-deep); }
@@ -100,13 +104,13 @@
   .cta-option b{ font-size:15px; display:block; margin-bottom:4px; color:var(--teal-deep); }
   .cta-option span{ font-size:13px; color:var(--ink-soft); }
   .cta-option:disabled{ opacity:0.5; cursor:wait; }
+  .cta-option.sel{ border-color:var(--clay); background:#FBEFE6; }
 
   .disclaimer{ text-align:left; font-size:12px; color:var(--ink-soft); background:var(--paper-deep); border-radius:14px; padding:16px 18px; line-height:1.6; margin-top:26px; }
   .disclaimer b{ color:var(--teal-deep); }
   .ty-wrap{ text-align:center; padding-top:30px; }
-  .send-note{ font-size:12px; color:var(--amber); margin-top:10px; }
+  .send-note{ font-size:12px; color:var(--ink-soft); margin-top:10px; }
 
-  /* Admin */
   .admin-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
   .tabs{ display:flex; gap:8px; margin-bottom:22px; }
   .tab-btn{ background:var(--card); border:1px solid var(--line); border-radius:999px; padding:8px 16px; font-size:13px; font-weight:600; cursor:pointer; color:var(--ink-soft); }
@@ -134,25 +138,20 @@
 /* ============================================================
    PENGATURAN — EDIT BAGIAN INI SAJA
    ============================================================
-   1) APPS_SCRIPT_URL: tempel URL Web App dari Google Apps Script
-      (lihat panduan setup). Sebelum diisi, submission tidak
-      akan tersimpan ke Sheet.
-   2) SHEET_URL: (opsional) link Google Sheet leads kamu, supaya
-      tombol "Buka Google Sheet" di panel admin berfungsi.
-   3) AGENTS: daftar advisor. Tambah/hapus di sini.
-      - slug: dipakai di link (?agent=slug), huruf kecil tanpa spasi
-      - whatsapp: format 62..., contoh 6281234567890
-      - active: false untuk menonaktifkan link advisor
+   1) APPS_SCRIPT_URL: tempel URL Web App dari Google Apps Script.
+      Harus berakhiran /exec. Sebelum diisi, data tidak tersimpan.
+   2) SHEET_URL: (opsional) link Google Sheet leads kamu.
+   3) AGENTS: daftar advisor (slug huruf kecil tanpa spasi,
+      whatsapp format 62..., active:false untuk menonaktifkan).
    4) ADMIN_CODE: kode untuk membuka panel admin.
    ============================================================ */
 const CONFIG = {
   APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbw63A6_HAvS5nNrX4KzOMOb6Y7xYONDNdz7Yahhz5vOYyKGY7afcQ0EfIPWCWGmtAuH/exec',
-  SHEET_URL: 'https://docs.google.com/spreadsheets/d/1zzBvCmnGKuKaQLZRAQtinZ3YKLRBcUp__J5IipWtdPs/edit?gid=0#gid=0',
+  SHEET_URL: 'https://docs.google.com/spreadsheets/d/1zzBvCmnGKuKaQLZRAQtinZ3YKLRBcUp__J5IipWtdPs/edit?gid=1692880442#gid=1692880442',
   ADMIN_CODE: 'prudenthope2026',
   AGENTS: [
-    { slug: 'vicia', name: 'Vicia', whatsapp: '6287874338166', active: true },
-    { slug: 'sisca', name: 'Sisca', whatsapp: '6282217700198', active: true },
-    { slug: 'marina', name: 'Marina', whatsapp: '628111115493', active: true }
+    { slug: 'vicia', name: 'Vicia', whatsapp: '6287874338166', active: true }
+    // , { slug: 'sisca', name: 'Sisca', whatsapp: '6282217700198', active: true }
   ]
 };
 /* ===================== AKHIR PENGATURAN ===================== */
@@ -165,6 +164,10 @@ const ICON_DOT = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><c
 const AREA_ALL = 'Saya ingin melihat semuanya';
 const A_HEALTH='🏥 Kesehatan saya dan keluarga', A_INCOME='❤️ Penghasilan keluarga', A_LIFE='❤️ Keluarga jika saya meninggal',
       A_CI='🧠 Kondisi finansial jika terkena penyakit kritis', A_EDU='🎓 Masa depan pendidikan anak', A_RETIRE='👵 Masa pensiun';
+
+const DEP_YES = 'Ya, ada yang bergantung pada penghasilanku';
+const DEP_NONE = 'Tidak ada';
+const DEP_SELF = 'Aku yang bergantung pada penghasilan orang lain';
 
 /* ---------------- Global state ---------------- */
 const app = document.getElementById('app');
@@ -183,96 +186,136 @@ let adminTab = 'links';
 
 function wantsAll(a){ return (a.protect_areas||[]).includes(AREA_ALL); }
 function isExisting(a){ return a.user_type==='Saya sudah memiliki asuransi Prudential' || a.user_type==='Saya sudah memiliki asuransi pribadi dari perusahaan lain'; }
-function hasDependents(a){ return (a.family_status && a.family_status!=='Single') || (a.dependents && a.dependents!=='Tidak ada'); }
-function hasHealthProtection(a){ return (a.current_protection||[]).some(x=>['BPJS','Asuransi kesehatan dari kantor','Asuransi kesehatan pribadi'].includes(x)); }
+function hasDependents(a){ return a.dependency===DEP_YES; }
+function isDependent(a){ return a.dependency===DEP_SELF; }
+function hasChildren(a){ return a.has_children==='Ya'; }
 
-/* ---------------- Modules ---------------- */
-const MODULES = [
-  { key:'health', label:'🏥 Health Protection', areaLabel:'🏥 Health',
-    include: a => wantsAll(a) || (a.protect_areas||[]).includes(A_HEALTH) || hasHealthProtection(a),
-    qs:[
-      {key:'health_source', title:'Saat ini, perlindungan kesehatanmu terutama berasal dari:', type:'single',
-        options:['BPJS','Benefit kantor','Asuransi pribadi','BPJS + asuransi pribadi','BPJS + benefit kantor','Kombinasi beberapa sumber','Belum memiliki perlindungan khusus']},
-      {key:'health_understanding', title:'Seberapa yakin kamu memahami perlindungan kesehatan yang kamu miliki?', type:'single',
-        options:['Sangat memahami manfaat dan batasannya','Cukup memahami','Masih perlu mengecek kembali','Belum pernah melakukan review']}
-    ],
-    compute:(a)=>{ const src=a.health_source; if(!src) return 'none';
-      if(src==='Belum memiliki perlindungan khusus') return 'red';
-      const strong=['Asuransi pribadi','BPJS + asuransi pribadi','Kombinasi beberapa sumber'].includes(src);
-      const understood=['Sangat memahami manfaat dan batasannya','Cukup memahami'].includes(a.health_understanding);
-      if(strong && understood) return 'green';
-      return 'yellow'; },
-    why:'Biaya kesehatan dan rawat inap bisa muncul tiba-tiba dan besar. Perlindungan yang jelas menjaga tabungan keluarga tetap utuh saat itu terjadi.',
-    see:{ red:'Belum terlihat adanya sumber perlindungan kesehatan khusus untuk menghadapi biaya rawat inap.', yellow:'Sudah ada sumber perlindungan kesehatan, namun pemahaman terhadap manfaat dan batasannya masih perlu dilengkapi.' },
-    next:{ red:'Pertimbangkan sumber perlindungan kesehatan apa yang tersedia dan apakah cukup untuk kebutuhan keluarga.', yellow:'Pertimbangkan untuk meninjau kembali manfaat dan batasan perlindungan kesehatan yang sudah dimiliki.' }
-  },
-  { key:'life', label:'❤️ Family Income Protection', areaLabel:'❤️ Family Income',
-    include: a => wantsAll(a) || (a.protect_areas||[]).includes(A_INCOME) || (a.protect_areas||[]).includes(A_LIFE) || hasDependents(a),
-    qs:[
-      {key:'life_survival', title:'Jika penghasilan utama keluarga berhenti, kira-kira berapa lama keluarga bisa tetap memenuhi kebutuhan rutin dengan dana yang tersedia?', type:'single',
-        options:['< 3 bulan','3–6 bulan','6–12 bulan','> 12 bulan']},
-      {key:'life_source', title:'Saat ini sumber perlindungan untuk keluarga jika pencari nafkah meninggal terutama berasal dari:', type:'single',
-        options:['Asuransi jiwa','Aset/investasi','Tabungan/dana tunai','Benefit kantor','Kombinasi beberapa sumber','Belum memiliki persiapan khusus']}
-    ],
-    compute:(a)=>{ if(!a.life_survival) return 'none';
-      if(a.life_source==='Belum memiliki persiapan khusus' || a.life_survival==='< 3 bulan') return 'red';
-      const strong=['Asuransi jiwa','Kombinasi beberapa sumber'].includes(a.life_source);
-      const durable=['> 12 bulan','6–12 bulan'].includes(a.life_survival);
-      if(strong && durable) return 'green';
-      return 'yellow'; },
-    why:'Jika pencari nafkah berhenti menghasilkan income, kebutuhan rutin keluarga tetap berjalan. Perlindungan di area ini menjaga keluarga tetap stabil.',
-    see:{ red:'Ketahanan finansial keluarga terlihat terbatas jika penghasilan utama tiba-tiba berhenti.', yellow:'Sudah ada gambaran ketahanan finansial keluarga, namun durasinya atau sumbernya mungkin masih perlu diperkuat.' },
-    next:{ red:'Pertimbangkan apakah ada perlindungan penghasilan yang bisa menjembatani periode tanpa income.', yellow:'Pertimbangkan untuk meninjau kembali kecukupan perlindungan penghasilan keluarga saat ini.' }
-  },
-  { key:'ci', label:'🧠 Critical Illness Protection', areaLabel:'🧠 Critical Illness',
-    include: a => wantsAll(a) || (a.protect_areas||[]).includes(A_CI),
-    qs:[
-      {key:'ci_readiness', title:'Jika kamu harus berhenti bekerja selama 1–2 tahun karena penyakit serius, seberapa siap kondisi finansial keluargamu?', type:'single',
-        options:['Sangat siap','Cukup siap','Kurang siap','Belum siap']},
-      {key:'ci_protection', title:'Saat ini kamu memiliki persiapan khusus untuk menghadapi risiko penyakit kritis?', type:'single',
-        options:['Asuransi penyakit kritis','Benefit kantor','Dana pribadi','Kombinasi beberapa sumber','Belum memiliki persiapan khusus']}
-    ],
-    compute:(a)=>{ if(!a.ci_readiness) return 'none';
-      if(a.ci_readiness==='Belum siap' || a.ci_protection==='Belum memiliki persiapan khusus') return 'red';
-      const strong=['Asuransi penyakit kritis','Kombinasi beberapa sumber','Benefit kantor'].includes(a.ci_protection);
-      const ready=['Sangat siap','Cukup siap'].includes(a.ci_readiness);
-      if(strong && ready) return 'green';
-      return 'yellow'; },
-    why:'Penyakit kritis bisa menghentikan kemampuan bekerja selama berbulan-bulan, sementara biaya dan kebutuhan keluarga tetap berjalan.',
-    see:{ red:'Belum terlihat adanya persiapan khusus untuk menghadapi dampak finansial penyakit kritis.', yellow:'Sudah ada sebagian kesiapan, namun belum sepenuhnya menutup risiko penyakit kritis.' },
-    next:{ red:'Review apakah dana pribadi dan perlindungan yang tersedia cukup untuk menghadapi periode tersebut.', yellow:'Pertimbangkan untuk meninjau kembali kecukupan perlindungan penyakit kritis.' }
-  },
-  { key:'education', label:'🎓 Education Planning', areaLabel:'🎓 Education',
-    include: a => wantsAll(a) || (a.protect_areas||[]).includes(A_EDU) || a.family_status==='Menikah dengan anak',
-    qs:[
-      {key:'edu_progress', title:'Sejauh mana kamu sudah menyiapkan dana pendidikan anak?', type:'single',
-        options:['Sudah punya target dan rutin menyiapkan','Sudah mulai menyiapkan tetapi belum memiliki target yang jelas','Belum mulai','Belum pernah menghitung kebutuhan dana pendidikan']},
-      {key:'edu_timing', title:'Kapan kebutuhan dana pendidikan terbesar kemungkinan muncul?', type:'single', options:['SD','SMP','SMA','Kuliah']}
-    ],
-    compute:(a)=>{ if(!a.edu_progress) return 'none';
-      if(a.edu_progress==='Sudah punya target dan rutin menyiapkan') return 'green';
-      if(a.edu_progress==='Belum mulai' || a.edu_progress==='Belum pernah menghitung kebutuhan dana pendidikan') return 'red';
-      return 'yellow'; },
-    why:'Biaya pendidikan naik setiap tahun dan tenggatnya tidak bisa ditunda. Menyiapkan lebih awal membuat bebannya jauh lebih ringan.',
-    see:{ red:'Persiapan dana pendidikan anak terlihat belum dimulai atau belum pernah dihitung kebutuhannya.', yellow:'Sudah mulai menyiapkan dana pendidikan, namun targetnya belum jelas sehingga kecukupannya sulit dipastikan.' },
-    next:{ red:'Pertimbangkan untuk mulai memetakan target dana pendidikan sesuai jenjang yang akan dituju.', yellow:'Pertimbangkan untuk menetapkan target dan proyeksi dana pendidikan yang lebih jelas.' }
-  },
-  { key:'retirement', label:'👵 Retirement Readiness', areaLabel:'👵 Retirement',
-    include: a => wantsAll(a) || (a.protect_areas||[]).includes(A_RETIRE),
-    qs:[
-      {key:'retire_age', title:'Di usia berapa kamu ingin memiliki kebebasan untuk tidak bergantung pada pekerjaan aktif?', type:'single', options:['45','50','55','60','> 60']},
-      {key:'retire_progress', title:'Sejauh mana kamu sudah menyiapkan dana untuk masa pensiun?', type:'single',
-        options:['Sudah punya strategi dan rutin menjalankannya','Sudah mulai tetapi belum punya target yang jelas','Belum mulai','Belum pernah menghitung kebutuhan pensiun']}
-    ],
-    compute:(a)=>{ if(!a.retire_progress) return 'none';
-      if(a.retire_progress==='Sudah punya strategi dan rutin menjalankannya') return 'green';
-      if(a.retire_progress==='Belum mulai' || a.retire_progress==='Belum pernah menghitung kebutuhan pensiun') return 'red';
-      return 'yellow'; },
+/* checklist helpers */
+function cp(a){ return a.current_protection||[]; }
+function hasHealth(a){ return cp(a).some(x=>['BPJS','Asuransi kesehatan dari kantor','Asuransi kesehatan pribadi'].includes(x)); }
+function hasPrivateHealth(a){ return cp(a).includes('Asuransi kesehatan pribadi'); }
+function hasLifeIns(a){ return cp(a).includes('Asuransi jiwa'); }
+function hasCIIns(a){ return cp(a).includes('Perlindungan penyakit kritis'); }
+function hasEduFund(a){ return cp(a).includes('Dana/investasi pendidikan anak'); }
+function hasRetFund(a){ return cp(a).includes('Dana/investasi pensiun'); }
+
+/* ---------------- Area definitions (text) ---------------- */
+const AREAS = {
+  health: { label:'🏥 Health Protection', areaLabel:'🏥 Health',
+    why:'Biaya kesehatan dan rawat inap bisa muncul tiba-tiba dan besar. Perlindungan yang jelas menjaga tabungan tetap utuh saat itu terjadi.',
+    see:{ red:'Belum terlihat adanya sumber perlindungan kesehatan yang cukup untuk menghadapi biaya rawat inap.', yellow:'Sudah ada sumber perlindungan kesehatan, namun masih perlu dipastikan cukup atau tidak.' },
+    next:{ red:'Pertimbangkan sumber perlindungan kesehatan apa yang tersedia dan apakah cukup untuk kebutuhanmu.', yellow:'Pertimbangkan untuk meninjau kembali manfaat dan batasan perlindungan kesehatan yang sudah dimiliki.' } },
+  life: { label:'❤️ Family Income Protection', areaLabel:'❤️ Family Income',
+    why:'Kalau pencari nafkah berhenti menghasilkan income, kebutuhan rutin orang-orang yang bergantung padanya tetap berjalan.',
+    see:{ red:'Ketahanan finansial keluarga terlihat terbatas jika penghasilan utama tiba-tiba berhenti.', yellow:'Sudah ada sebagian perlindungan penghasilan, namun mungkin masih perlu diperkuat.' },
+    next:{ red:'Pertimbangkan apakah ada perlindungan yang bisa menjembatani keluarga saat income berhenti.', yellow:'Pertimbangkan untuk meninjau kembali kecukupan perlindungan penghasilan keluarga.' } },
+  ci: { label:'🧠 Critical Illness Protection', areaLabel:'🧠 Critical Illness',
+    why:'Penyakit kritis bisa menghentikan kemampuan bekerja berbulan-bulan, sementara biaya hidup tetap berjalan. Perlindungan ini menggantikan income yang hilang selama masa itu.',
+    see:{ red:'Belum terlihat adanya persiapan khusus untuk menggantikan income jika penyakit kritis membuatmu berhenti bekerja.', yellow:'Sudah ada sebagian kesiapan, namun belum sepenuhnya menutup risiko penyakit kritis.' },
+    next:{ red:'Review apakah dana pribadi dan perlindungan yang ada cukup untuk menghadapi 1–2 tahun tanpa income.', yellow:'Pertimbangkan untuk meninjau kembali kecukupan perlindungan penyakit kritis.' } },
+  education: { label:'🎓 Education Planning', areaLabel:'🎓 Education',
+    why:'Biaya pendidikan naik tiap tahun dan tenggatnya tidak bisa ditunda. Menyiapkan lebih awal membuat bebannya jauh lebih ringan.',
+    see:{ red:'Persiapan dana pendidikan anak terlihat belum dimulai atau belum terarah.', yellow:'Sudah mulai menyiapkan dana pendidikan, namun kecukupannya belum jelas.' },
+    next:{ red:'Pertimbangkan untuk mulai memetakan target dana pendidikan sesuai jenjang yang akan dituju.', yellow:'Pertimbangkan untuk menetapkan target dan proyeksi dana pendidikan yang lebih jelas.' } },
+  retirement: { label:'👵 Retirement Readiness', areaLabel:'👵 Retirement',
     why:'Masa pensiun bisa berlangsung puluhan tahun tanpa penghasilan aktif. Semakin awal disiapkan, semakin ringan yang perlu disisihkan.',
-    see:{ red:'Persiapan dana pensiun terlihat belum dimulai atau belum pernah dihitung kebutuhannya.', yellow:'Sudah ada sebagian persiapan pensiun, namun belum memiliki target yang jelas.' },
-    next:{ red:'Pertimbangkan untuk mulai memetakan kebutuhan dana pensiun sesuai usia target kebebasan finansial.', yellow:'Pertimbangkan untuk menetapkan target dan konsistensi persiapan dana pensiun.' }
+    see:{ red:'Persiapan dana pensiun terlihat belum dimulai atau belum konsisten.', yellow:'Sudah ada sebagian persiapan pensiun, namun belum memiliki target yang jelas.' },
+    next:{ red:'Pertimbangkan untuk mulai memetakan kebutuhan dana pensiun sesuai usia target kebebasan finansial.', yellow:'Pertimbangkan untuk menetapkan target dan konsistensi persiapan dana pensiun.' } }
+};
+
+/* Which areas are relevant (appear on map at all) */
+function areaRelevant(area, a){
+  if(area==='life') return hasDependents(a);
+  if(area==='education') return hasChildren(a);
+  return true; // health, ci, retirement always
+}
+
+/* Which areas the user prioritized (get a sharp question) */
+function prioritizedAreas(a){
+  if(wantsAll(a)) return ['health','life','ci','education','retirement'];
+  const set = [];
+  (a.protect_areas||[]).forEach(p=>{
+    if(p===A_HEALTH && !set.includes('health')) set.push('health');
+    if((p===A_INCOME||p===A_LIFE) && !set.includes('life')) set.push('life');
+    if(p===A_CI && !set.includes('ci')) set.push('ci');
+    if(p===A_EDU && !set.includes('education')) set.push('education');
+    if(p===A_RETIRE && !set.includes('retirement')) set.push('retirement');
+  });
+  return set;
+}
+
+/* Sharp question (one per area) */
+const SHARP = {
+  health: {key:'q_health', moduleLabel:'🏥 Health Protection', title:'Kalau kamu atau keluarga harus dirawat inap bulan ini, seberapa siap kamu menghadapi biayanya?', options:['Sangat siap','Cukup siap','Kurang siap','Tidak siap']},
+  life: {key:'q_life', moduleLabel:'❤️ Family Income Protection', title:'Jika penghasilan utama berhenti hari ini, berapa lama orang-orang yang bergantung padamu bisa tetap memenuhi kebutuhan rutin?', options:['< 3 bulan','3–6 bulan','6–12 bulan','> 12 bulan']},
+  ci: {key:'q_ci', moduleLabel:'🧠 Critical Illness Protection', title:'Jika kamu harus berhenti bekerja 1–2 tahun karena penyakit serius, seberapa siap kondisi finansialmu?', options:['Sangat siap','Cukup siap','Kurang siap','Belum siap']},
+  education: {key:'q_edu', moduleLabel:'🎓 Education Planning', title:'Sejauh mana kamu sudah menyiapkan dana pendidikan anak?', options:['Sudah punya target dan rutin menyiapkan','Sudah mulai tetapi belum tahu cukup atau tidak','Belum mulai','Belum pernah menghitung kebutuhannya']},
+  retirement: {key:'q_ret', moduleLabel:'👵 Retirement Readiness', title:'Sejauh mana kamu sudah menyiapkan dana untuk masa pensiun?', options:['Sudah punya strategi dan rutin menjalankannya','Sudah mulai tetapi belum rutin','Belum mulai','Belum pernah menghitung kebutuhannya']}
+};
+
+/* ---------------- Compute status per area ---------------- */
+function computeArea(area, a){
+  if(!areaRelevant(area, a)) return 'none';
+  if(area==='health'){
+    const q=a.q_health;
+    if(q){
+      if(q==='Kurang siap'||q==='Tidak siap') return hasPrivateHealth(a) ? 'yellow' : 'red';
+      if(hasPrivateHealth(a)) return 'green';
+      return 'yellow';
+    }
+    if(hasPrivateHealth(a)) return 'green';
+    if(hasHealth(a)) return 'yellow';
+    return 'red';
   }
-];
+  if(area==='life'){
+    const q=a.q_life;
+    if(q){
+      if(q==='< 3 bulan') return 'red';
+      if(hasLifeIns(a) && (q==='> 12 bulan'||q==='6–12 bulan')) return 'green';
+      if(hasLifeIns(a)) return 'yellow';
+      if(q==='> 12 bulan') return 'yellow';
+      return 'red';
+    }
+    return hasLifeIns(a) ? 'yellow' : 'red';
+  }
+  if(area==='ci'){
+    const q=a.q_ci;
+    if(q){
+      if(q==='Belum siap'||q==='Kurang siap') return hasCIIns(a) ? 'yellow' : 'red';
+      if(hasCIIns(a)) return 'green';
+      return 'yellow';
+    }
+    return hasCIIns(a) ? 'yellow' : 'red';
+  }
+  if(area==='education'){
+    const q=a.q_edu;
+    if(q){
+      if(q==='Sudah punya target dan rutin menyiapkan') return 'green';
+      if(q==='Belum mulai'||q==='Belum pernah menghitung kebutuhannya') return 'red';
+      return 'yellow';
+    }
+    return hasEduFund(a) ? 'yellow' : 'red';
+  }
+  if(area==='retirement'){
+    const q=a.q_ret;
+    if(q){
+      if(q==='Sudah punya strategi dan rutin menjalankannya') return 'green';
+      if(q==='Belum mulai'||q==='Belum pernah menghitung kebutuhannya') return 'red';
+      return 'yellow';
+    }
+    return hasRetFund(a) ? 'yellow' : 'red';
+  }
+  return 'none';
+}
+function computeMap(){ const m={}; ['health','life','ci','education','retirement'].forEach(k=>{ m[k]=computeArea(k, answers); }); return m; }
+function computeTop3(map){
+  const order={red:0,yellow:1};
+  const list=['health','life','ci','education','retirement'].filter(k=>map[k]==='red'||map[k]==='yellow');
+  list.sort((a,b)=>order[map[a]]-order[map[b]]);
+  return list.slice(0,3);
+}
+const STATUS_LABEL = { green:'🟢 Relatively Protected', yellow:'🟡 Worth Reviewing', red:'🔴 Needs Attention', none:'-' };
+const STATUS_CLASS = { green:'status-green', yellow:'status-yellow', red:'status-red' };
 
 /* ---------------- Flow ---------------- */
 function getOrderedSteps(){
@@ -284,26 +327,28 @@ function getOrderedSteps(){
       steps.push({key:'attrib_choose', title:'Pilih advisor kamu', type:'single', options: names.length? names : ['Belum ada advisor terdaftar']});
     }
   }
-  steps.push({key:'user_type', title:'Kondisi kamu saat ini yang paling sesuai:', type:'single',
-    options:['Saya sudah memiliki asuransi Prudential','Saya sudah memiliki asuransi pribadi dari perusahaan lain','Saya belum memiliki asuransi pribadi']});
   steps.push({key:'protect_areas', title:'Apa yang paling ingin kamu lindungi?', hint:'Pilih hingga 3, atau pilih "Saya ingin melihat semuanya".', type:'multi', max:3, exclusive:AREA_ALL,
     options:[A_HEALTH, A_INCOME, A_LIFE, A_CI, A_EDU, A_RETIRE, AREA_ALL]});
-  steps.push({key:'age', title:'Berapa usia kamu saat ini?', type:'number', placeholder:'Contoh: 30'});
-  steps.push({key:'family_status', title:'Status keluarga kamu saat ini', type:'single', options:['Single','Menikah','Menikah dengan anak']});
-  steps.push({key:'dependents', title:'Jumlah orang yang bergantung secara finansial padamu', type:'single', options:['Tidak ada','1 orang','2 orang','3 orang','4+ orang']});
-  const soloExpense = answers.family_status==='Single' && answers.dependents==='Tidak ada';
-  steps.push({key:'expense', title: soloExpense ? 'Kisaran pengeluaran rutin kamu per bulan?' : 'Kisaran pengeluaran rutin rumah tangga per bulan?', type:'single',
-    options:['< Rp5 juta/bulan','Rp5–10 juta/bulan','Rp10–20 juta/bulan','Rp20–50 juta/bulan','> Rp50 juta/bulan']});
+  steps.push({key:'user_type', title:'Kondisi kamu saat ini yang paling sesuai:', type:'single',
+    options:['Saya sudah memiliki asuransi Prudential','Saya sudah memiliki asuransi pribadi dari perusahaan lain','Saya belum memiliki asuransi pribadi']});
+  steps.push({key:'dependency', title:'Saat ini, apakah ada orang yang secara finansial bergantung padamu?', hint:'Pilih yang paling sesuai kondisimu.', type:'single',
+    options:[DEP_YES, DEP_NONE, DEP_SELF]});
+  steps.push({key:'has_children', title:'Apakah kamu memiliki anak yang pendidikannya masih perlu disiapkan?', type:'single', options:['Ya','Belum']});
   steps.push({key:'current_protection', title:'Saat ini kamu sudah memiliki perlindungan atau persiapan apa?', hint:'Boleh pilih lebih dari satu.', type:'multi', exclusive:'Belum memiliki perlindungan khusus',
     options:['BPJS','Asuransi kesehatan dari kantor','Asuransi kesehatan pribadi','Asuransi jiwa','Perlindungan penyakit kritis','Dana/investasi pendidikan anak','Dana/investasi pensiun','Belum memiliki perlindungan khusus']});
 
   if(isExisting(answers)){
-    steps.push({key:'last_review', title:'Kapan terakhir kali proteksimu direview secara menyeluruh?', type:'single', options:['< 1 tahun','1–2 tahun','3–5 tahun','> 5 tahun','Belum pernah melakukan review']});
-    steps.push({key:'life_changes', title:'Apa yang berubah sejak kamu memiliki perlindungan tersebut?', hint:'Boleh pilih lebih dari satu.', type:'multi', exclusive:'Tidak ada perubahan signifikan',
-      options:['Menikah','Punya anak','Jumlah tanggungan bertambah','Penghasilan berubah','Pindah pekerjaan','Memiliki utang baru','Kondisi keluarga berubah','Kebutuhan kesehatan berubah','Tidak ada perubahan signifikan']});
+    steps.push({key:'last_review', title:'Kapan terakhir kali kamu benar-benar mengecek isi polismu?', hint:'Jujur saja — ini justru pertanyaan yang paling penting.', type:'single',
+      options:['Dalam 1 tahun terakhir','1–2 tahun lalu','Lebih dari 3 tahun lalu','Sudah lupa','Belum pernah benar-benar mengeceknya']});
   }
 
-  MODULES.forEach(m => { if(m.include(answers)){ m.qs.forEach(q => steps.push(Object.assign({}, q, {moduleLabel:m.label}))); } });
+  const prioritized = prioritizedAreas(answers);
+  ['health','life','ci','education','retirement'].forEach(area=>{
+    if(prioritized.includes(area) && areaRelevant(area, answers)){
+      const q = SHARP[area];
+      steps.push(Object.assign({type:'single'}, q));
+    }
+  });
   return steps;
 }
 
@@ -325,8 +370,7 @@ function render(){
   if(view==='landing') return renderLanding();
   if(view==='assessment') return renderAssessment();
   if(view==='result') return renderResult();
-  if(view==='contact') return renderContact();
-  if(view==='final_cta') return renderFinalCta();
+  if(view==='capture') return renderCapture();
   if(view==='thankyou') return renderThankYou();
   if(view==='admin') return renderAdmin();
 }
@@ -349,9 +393,11 @@ function renderLanding(){
       <p class="eyebrow">Know what you have. Know what you may need.</p>
       <h1 class="headline">PROTECTION CHECK</h1>
       <h2 class="headline2">Seberapa siap kamu menghadapi risiko finansial?</h2>
-      <p class="sub">Kenali posisi proteksi keuanganmu dalam beberapa menit. Lihat apa yang sudah kamu miliki, area mana yang mungkin masih perlu kamu perhatikan, dan apa yang bisa kamu diskusikan lebih lanjut dengan advisor.</p>
-      <div class="cta-row"><button class="btn btn-primary" id="startBtn">Mulai Protection Check</button></div>
+      <p class="sub">Kenali posisi proteksi keuanganmu dalam beberapa menit. Lihat apa yang sudah kamu miliki, dan area mana yang mungkin masih perlu kamu perhatikan.</p>
+      <div class="cta-row"><button class="btn btn-primary" id="startBtn">Lihat peta proteksiku →</button></div>
     </div>
+
+    <div class="urgency-line">Banyak orang punya polis, tapi tidak pernah benar-benar mengeceknya lagi. Butuh sekitar 3 menit untuk tahu di mana posisimu sekarang.</div>
 
     <ul class="reassure">
       <li>${ICON_DOT}Tidak perlu tahu produk asuransi terlebih dahulu.</li>
@@ -376,7 +422,7 @@ function renderAssessment(){
   if(flowIndex >= steps.length){ view='result'; render(); return; }
   const s = steps[flowIndex];
   const percentDone = Math.round((flowIndex/steps.length)*100);
-  const showNextBtn = s.type==='multi' || s.type==='number';
+  const showNextBtn = s.type==='multi';
 
   app.className='app';
   app.innerHTML = `
@@ -399,19 +445,12 @@ function renderAssessment(){
   };
 
   const qBody = document.getElementById('qBody');
-
   if(s.type==='single'){
     qBody.innerHTML = `<div class="opt-grid">` + s.options.map(o=>`<button class="opt ${answers[s.key]===o?'selected':''}" data-val="${o}"><span>${o}</span><span class="check">${ICON_CHECK}</span></button>`).join('') + `</div>`;
     qBody.querySelectorAll('.opt').forEach(btn=>{ btn.onclick = () => { answers[s.key]=btn.dataset.val; goNext(); }; });
   }
   if(s.type==='multi'){ renderMultiOptions(s, qBody); }
-  if(s.type==='number'){
-    qBody.innerHTML = `<input class="field" type="number" min="0" max="120" inputmode="numeric" placeholder="${s.placeholder||''}" id="numInput" value="${answers[s.key]||''}">`;
-    const inp = document.getElementById('numInput');
-    inp.addEventListener('input', ()=>{ answers[s.key]=inp.value; updateNextEnabled(s); });
-    setTimeout(()=>inp.focus(),50);
-    updateNextEnabled(s);
-  }
+
   const nextBtn = document.getElementById('nextBtn');
   if(nextBtn) nextBtn.onclick = goNext;
 }
@@ -453,10 +492,7 @@ function renderMultiOptions(s, qBody){
 
 function updateNextEnabled(s){
   const nextBtn = document.getElementById('nextBtn'); if(!nextBtn) return;
-  let ok=false;
-  if(s.type==='multi') ok = (answers[s.key]||[]).length>0;
-  if(s.type==='number') ok = answers[s.key] && parseInt(answers[s.key],10)>0 && parseInt(answers[s.key],10)<120;
-  nextBtn.disabled = !ok;
+  nextBtn.disabled = !((answers[s.key]||[]).length>0);
 }
 
 function goNext(){
@@ -467,95 +503,94 @@ function goNext(){
 }
 
 /* ---------------- Result ---------------- */
-function computeMap(){ const map={}; MODULES.forEach(m => { map[m.key] = m.include(answers) ? m.compute(answers) : 'none'; }); return map; }
-function computeTop3(map){
-  const order = { red:0, yellow:1 };
-  const candidates = MODULES.filter(m => map[m.key]==='red' || map[m.key]==='yellow');
-  candidates.sort((a,b) => order[map[a.key]] - order[map[b.key]]);
-  return candidates.slice(0,3).map(m => m.key);
-}
-const STATUS_LABEL = { green:'🟢 Relatively Protected', yellow:'🟡 Worth Reviewing', red:'🔴 Needs Attention', none:'⚪ Belum dinilai' };
-const STATUS_CLASS = { green:'status-green', yellow:'status-yellow', red:'status-red', none:'status-none' };
-
 function renderResult(){
   const map = computeMap();
   const top3 = computeTop3(map);
   resultCache = { map, top3 };
-  const shownModules = MODULES.filter(m => map[m.key]!=='none');
+  const shown = ['health','life','ci','education','retirement'].filter(k=>map[k]!=='none');
+  const redCount = shown.filter(k=>map[k]==='red').length;
+
+  let urgencyHtml;
+  if(redCount>0){
+    urgencyHtml = `<div class="urgency-badge">${redCount} dari ${shown.length} area proteksimu belum terlihat terlindungi. Yuk lihat area mana saja di bawah ini.</div>`;
+  } else {
+    urgencyHtml = `<div class="urgency-badge ok">Kabar baik — area-area utamamu terlihat relatif terjaga. Tetap baik untuk ditinjau secara berkala.</div>`;
+  }
+
+  let reviewNote = '';
+  if(isExisting(answers) && ['Lebih dari 3 tahun lalu','Sudah lupa','Belum pernah benar-benar mengeceknya'].includes(answers.last_review)){
+    reviewNote = `<div class="review-note">Kamu menyebut sudah lama tidak meninjau polismu. Kondisi keluarga, penghasilan, dan kebutuhan bisa banyak berubah sejak polis dibuat — inilah saat yang tepat untuk memastikan proteksimu masih sesuai.</div>`;
+  }
+
+  let singleIncomeNote = '';
+  if(isDependent(answers)){
+    singleIncomeNote = `<div class="single-income-note">Karena kamu menyebut saat ini bergantung pada penghasilan orang lain, memastikan <b>pencari nafkah utama di keluargamu</b> memiliki perlindungan jiwa dan penyakit kritis yang memadai sama pentingnya dengan melindungi dirimu sendiri. Ini hal yang baik untuk didiskusikan bersama pasangan atau keluargamu.</div>`;
+  }
 
   app.className='app';
   app.innerHTML = `
     <h2 class="result-title">Your Protection Map</h2>
     <p class="result-sub">Berdasarkan informasi yang kamu berikan, begini gambaran posisi proteksimu saat ini.</p>
-    ${shownModules.map(m => `
+    ${urgencyHtml}
+    ${reviewNote}
+    ${shown.map(k => `
       <div class="map-row">
-        <span class="map-area">${m.areaLabel}</span>
-        <span class="status-pill ${STATUS_CLASS[map[m.key]]}">${STATUS_LABEL[map[m.key]]}</span>
+        <span class="map-area">${AREAS[k].areaLabel}</span>
+        <span class="status-pill ${STATUS_CLASS[map[k]]}">${STATUS_LABEL[map[k]]}</span>
       </div>`).join('')}
+    ${singleIncomeNote}
 
     <div class="priority-block">
       <h2 style="font-size:19px; margin:0 0 14px;">Your Top ${top3.length || 0} Areas to Think About</h2>
       ${top3.length===0 ? `<p style="font-size:14px; color:var(--ink-soft);">Berdasarkan jawabanmu, area-area utama terlihat relatif cukup terjaga. Tetap baik untuk didiskusikan secara berkala dengan advisor.</p>` :
-      top3.map(key => { const m = MODULES.find(x=>x.key===key); const status = map[key];
+      top3.map(key => { const m = AREAS[key]; const status = map[key];
         const existingPrefix = (isExisting(answers) && status!=='red') ? 'Kamu sudah memiliki perlindungan di area ini. ' : '';
+        const nextText = (isExisting(answers) && status!=='red') ? 'Yang perlu diperhatikan adalah apakah perlindungan tersebut masih sesuai dengan kondisi, kebutuhan, dan kemampuan finansialmu saat ini.' : m.next[status];
         return `<div class="priority-card">
           <h4>${m.label}</h4>
           <div class="pc-block"><p class="pc-label">What we see</p><p class="pc-text">${existingPrefix}${m.see[status]}</p></div>
           <div class="pc-block"><p class="pc-label">Why it matters</p><p class="pc-text">${m.why}</p></div>
-          <div class="pc-block next"><p class="pc-label">Next step</p><p class="pc-text">${(isExisting(answers) && status!=='red') ? 'Yang perlu diperhatikan adalah apakah perlindungan tersebut masih sesuai dengan kondisi keluarga, kebutuhan, dan kemampuan finansialmu saat ini.' : m.next[status]}</p></div>
+          <div class="pc-block next"><p class="pc-label">Next step</p><p class="pc-text">${nextText}</p></div>
         </div>`;
       }).join('') }
     </div>
 
     <div class="step-actions" style="margin-top:10px;"><button class="btn btn-primary" id="continueBtn">Lanjutkan</button></div>
   `;
-  document.getElementById('continueBtn').onclick = () => { view='contact'; render(); };
+  document.getElementById('continueBtn').onclick = () => { view='capture'; render(); };
 }
 
-/* ---------------- Contact ---------------- */
-function renderContact(){
+/* ---------------- Capture (kontak + langkah, satu layar) ---------------- */
+function renderCapture(){
   app.className='app';
   app.innerHTML = `
-    <div class="q-card">
-      <p class="q-eyebrow">Terakhir</p>
-      <h2 class="q-title">Ke mana hasilnya boleh dikirim?</h2>
-      <p class="q-hint">Data ini hanya digunakan untuk menghubungimu terkait hasil Protection Check.</p>
+    <h2 class="result-title" style="font-size:23px;">Simpan hasil Protection Check kamu</h2>
+    <p class="result-sub">Isi kontak supaya hasilmu tersimpan, lalu pilih langkah berikutnya. Kamu yang menentukan — tidak ada kewajiban membeli.</p>
+    <div class="q-card" style="margin-bottom:18px;">
       <label class="field-label">Nama</label>
       <input class="field" type="text" id="nameInput" placeholder="Nama lengkap" value="${answers.name||''}" style="margin-bottom:14px;">
       <label class="field-label">Nomor WhatsApp</label>
-      <input class="field" type="tel" id="waInput" placeholder="08xx xxxx xxxx" value="${answers.whatsapp||''}" style="margin-bottom:14px;">
-      <label class="field-label">Email (opsional)</label>
-      <input class="field" type="email" id="emailInput" placeholder="nama@email.com" value="${answers.email||''}">
-      <div class="consent-box">
-        <input type="checkbox" id="consentBox" ${answers._consent?'checked':''}>
-        <label for="consentBox">Saya bersedia dihubungi terkait hasil Protection Check yang saya isi.</label>
-      </div>
-      <div class="step-actions"><button class="btn btn-primary" id="nextBtn" disabled>Lanjut</button></div>
+      <input class="field" type="tel" id="waInput" placeholder="08xx xxxx xxxx" value="${answers.whatsapp||''}">
     </div>
-  `;
-  const nameInput=document.getElementById('nameInput'), waInput=document.getElementById('waInput'), emailInput=document.getElementById('emailInput'), consentBox=document.getElementById('consentBox'), nextBtn=document.getElementById('nextBtn');
-  function check(){
-    answers.name=nameInput.value; answers.whatsapp=waInput.value; answers.email=emailInput.value; answers._consent=consentBox.checked;
-    nextBtn.disabled = !(nameInput.value.trim() && waInput.value.trim().length>=8 && consentBox.checked);
-  }
-  [nameInput,waInput,emailInput].forEach(el=>el.addEventListener('input',check));
-  consentBox.addEventListener('change',check);
-  check();
-  nextBtn.onclick = () => { view='final_cta'; render(); };
-}
-
-/* ---------------- Final CTA ---------------- */
-function renderFinalCta(){
-  app.className='app';
-  app.innerHTML = `
-    <h2 class="result-title" style="font-size:22px;">Mau memahami hasil Protection Check kamu lebih lanjut?</h2>
-    <p class="result-sub">Kamu yang menentukan langkah berikutnya. Tidak ada tekanan untuk membeli.</p>
-    <button class="cta-option" data-intent="understand"><span class="cta-emoji">🟢</span><b>Saya ingin dibantu memahami hasil saya</b><span>Ngobrol santai lewat WhatsApp dengan advisor.</span></button>
-    <button class="cta-option" data-intent="budget"><span class="cta-emoji">🔵</span><b>Saya ingin tahu estimasi budget untuk menutup potential gap</b><span>Advisor akan menghitungkan lewat sistem resmi perusahaan, lalu menghubungimu.</span></button>
-    <button class="cta-option" data-intent="save"><span class="cta-emoji">⚪</span><b>Saya ingin simpan hasil dulu</b><span>Hasil dikirim ke WhatsApp/email kamu untuk dipelajari sendiri dulu.</span></button>
+    <p class="q-eyebrow" style="margin-bottom:10px;">Pilih langkah berikutnya</p>
+    <button class="cta-option ${answers._choice==='understand'?'sel':''}" data-intent="understand"><span class="cta-emoji">🟢</span><b>Ya, aku ingin dibantu memahami hasilku</b><span>Advisor akan menghubungimu lewat WhatsApp untuk menjelaskan.</span></button>
+    <button class="cta-option ${answers._choice==='budget'?'sel':''}" data-intent="budget"><span class="cta-emoji">🔵</span><b>Ya, aku ingin tahu estimasi budget sesuai kebutuhanku</b><span>Advisor menghitungkan lewat sistem resmi perusahaan, lalu menghubungimu.</span></button>
+    <button class="cta-option ${answers._choice==='save'?'sel':''}" data-intent="save"><span class="cta-emoji">⚪</span><b>Belum, aku mau pelajari dulu sendiri</b><span>Hasilmu tetap tersimpan. Advisor tidak menghubungi sampai kamu siap.</span></button>
+    <p style="font-size:11.5px; color:var(--ink-soft); line-height:1.6; margin:14px 0 0;">Dengan menyimpan, kamu setuju data ini digunakan untuk keperluan Protection Check. Advisor hanya menghubungimu jika kamu memilih salah satu opsi "ingin dibantu".</p>
+    <div class="step-actions"><button class="btn btn-primary" id="saveBtn" disabled>Simpan hasilku</button></div>
     <p id="sendState" class="send-note" style="display:none;"></p>
   `;
-  app.querySelectorAll('.cta-option').forEach(btn=>{ btn.onclick = () => finalizeSubmission(btn.dataset.intent); });
+  const nameInput=document.getElementById('nameInput'), waInput=document.getElementById('waInput'), saveBtn=document.getElementById('saveBtn');
+  function refresh(){
+    answers.name=nameInput.value; answers.whatsapp=waInput.value;
+    app.querySelectorAll('.cta-option').forEach(b=>b.classList.toggle('sel', b.dataset.intent===answers._choice));
+    saveBtn.disabled = !(nameInput.value.trim() && waInput.value.trim().length>=8 && answers._choice);
+  }
+  nameInput.addEventListener('input',refresh);
+  waInput.addEventListener('input',refresh);
+  app.querySelectorAll('.cta-option').forEach(btn=>{ btn.onclick = () => { answers._choice = btn.dataset.intent; refresh(); }; });
+  saveBtn.onclick = () => finalizeSubmission(answers._choice);
+  refresh();
 }
 
 function statusReadable(code){ return STATUS_LABEL[code] || '-'; }
@@ -572,44 +607,42 @@ async function finalizeSubmission(intentKey){
   }
 
   let priority = 'NURTURE';
-  const staleReview = isExisting(answers) && ['> 5 tahun','3–5 tahun','Belum pernah melakukan review'].includes(answers.last_review);
-  const bigChange = (answers.life_changes||[]).some(x=>x!=='Tidak ada perubahan signifikan');
+  const overdue = isExisting(answers) && ['Lebih dari 3 tahun lalu','Sudah lupa','Belum pernah benar-benar mengeceknya'].includes(answers.last_review);
   if(intentKey==='budget') priority='HIGH';
-  else if(staleReview && bigChange) priority='HIGH';
+  else if(overdue) priority='HIGH';
   else if(intentKey==='understand' || isExisting(answers)) priority='WARM';
 
   const intentReadable = { understand:'Pahami hasil', budget:'Estimasi budget', save:'Simpan dulu' }[intentKey] || intentKey;
 
   const payload = {
-    timestamp: new Date().toISOString(),
-    agent_name: agentName,
-    agent_slug: agentSlug,
-    name: answers.name || '',
-    whatsapp: normalizePhone(answers.whatsapp),
-    email: answers.email || '',
-    user_type: answers.user_type || '',
-    age: answers.age || '',
-    family_status: answers.family_status || '',
-    dependents: answers.dependents || '',
-    expense: answers.expense || '',
-    protect_areas: (answers.protect_areas||[]).join(', '),
-    current_protection: (answers.current_protection||[]).join(', '),
-    health: statusReadable(map.health),
-    life: statusReadable(map.life),
-    ci: statusReadable(map.ci),
-    education: statusReadable(map.education),
-    retirement: statusReadable(map.retirement),
-    last_review: answers.last_review || '',
-    life_changes: (answers.life_changes||[]).join(', '),
-    intent: intentReadable,
-    priority: priority,
-    top3: top3.map(k => MODULES.find(m=>m.key===k)?.areaLabel).filter(Boolean).join(', ')
+    'Timestamp': new Date().toISOString(),
+    'Agent': agentName,
+    'Agent Slug': agentSlug,
+    'Nama': answers.name || '',
+    'WhatsApp': normalizePhone(answers.whatsapp),
+    'Boleh Dihubungi': (intentKey==='save') ? 'Belum — mau pelajari dulu' : 'Ya, boleh dihubungi',
+    'Sudah Punya Asuransi': answers.user_type || '',
+    'Ada Tanggungan': answers.dependency || '',
+    'Punya Anak': answers.has_children || '',
+    'Area Ingin Dilindungi': (answers.protect_areas||[]).join(', '),
+    'Perlindungan Saat Ini': (answers.current_protection||[]).join(', '),
+    'Terakhir Cek Polis': answers.last_review || '',
+    'Health': statusReadable(map.health),
+    'Family Income': statusReadable(map.life),
+    'Critical Illness': statusReadable(map.ci),
+    'Education': statusReadable(map.education),
+    'Retirement': statusReadable(map.retirement),
+    'Intent': intentReadable,
+    'Priority': priority,
+    'Top 3 Area': top3.map(k => AREAS[k].areaLabel).join(', '),
+    'Status Follow-up': '',
+    'Catatan': ''
   };
 
   const buttons = app.querySelectorAll('.cta-option');
   buttons.forEach(b=>b.disabled=true);
   const sendState = document.getElementById('sendState');
-  if(sendState){ sendState.style.display='block'; sendState.style.color='var(--ink-soft)'; sendState.textContent='Mengirim data...'; }
+  if(sendState){ sendState.style.display='block'; sendState.textContent='Mengirim data...'; }
 
   try{
     if(CONFIG.APPS_SCRIPT_URL && CONFIG.APPS_SCRIPT_URL.indexOf('TEMPEL_URL')===-1){
@@ -624,7 +657,7 @@ async function finalizeSubmission(intentKey){
 function renderThankYou(){
   const name = answers.name ? answers.name.split(' ')[0] : '';
   let bodyText;
-  const topAreaNames = (resultCache?.top3||[]).map(k => MODULES.find(m=>m.key===k)?.areaLabel).filter(Boolean).join(', ');
+  const topAreaNames = (resultCache?.top3||[]).map(k => AREAS[k].areaLabel).join(', ');
 
   if(chosenFinalIntent==='budget'){
     bodyText = `Terima kasih${name?', '+name:''}. Data kebutuhanmu sudah kami terima. Advisor akan menghitungkan estimasi menggunakan sistem resmi perusahaan, lalu menghubungimu melalui WhatsApp.`;
@@ -638,12 +671,15 @@ function renderThankYou(){
   if(currentAgent && currentAgent.whatsapp){ waNumber = currentAgent.whatsapp; waAgentName = currentAgent.name; }
   else if(answers.attrib_choose){ const found = activeAgents.find(a=>a.name===answers.attrib_choose); if(found && found.whatsapp){ waNumber=found.whatsapp; waAgentName=found.name; } }
 
+  const consented = chosenFinalIntent==='understand' || chosenFinalIntent==='budget';
   let waButton;
-  if(waNumber){
+  if(waNumber && consented){
     const msg = `Hai${waAgentName?' '+waAgentName.split(' ')[0]:''}, aku baru saja menyelesaikan Protection Check${name?' atas nama '+name:''}. Boleh dibantu jelaskan hasilnya?`;
     waButton = `<a class="btn btn-primary" href="https://wa.me/${normalizePhone(waNumber)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener" style="display:inline-block; text-decoration:none;">Chat dengan advisor sekarang</a>`;
+  } else if(consented){
+    waButton = `<p style="font-size:13px; color:var(--ink-soft);">Advisor akan menghubungimu melalui nomor WhatsApp yang kamu berikan.</p>`;
   } else {
-    waButton = `<p style="font-size:13px; color:var(--ink-soft);">Advisor tim kami akan menghubungimu melalui nomor WhatsApp yang kamu berikan.</p>`;
+    waButton = `<p style="font-size:13px; color:var(--ink-soft);">Hasilmu sudah tersimpan. Kamu bisa menghubungi advisor kapan pun kamu merasa siap.</p>`;
   }
 
   app.className='app';
@@ -661,7 +697,7 @@ function renderThankYou(){
   document.getElementById('restartBtn').onclick = () => { view='landing'; answers={}; flowIndex=0; chosenFinalIntent=null; resultCache=null; render(); };
 }
 
-/* ---------------- Admin (agent links + sheet pointer) ---------------- */
+/* ---------------- Admin ---------------- */
 function renderAdmin(){
   if(!adminUnlocked){
     const code = prompt('Masukkan kode akses admin:');
@@ -723,13 +759,14 @@ function renderSheetTab(body){
     <div class="warn-banner">Semua data leads tersimpan di Google Sheet kamu — di sanalah kamu memfilter, memberi catatan, dan mengubah status follow-up. Panel ini hanya pintu menuju ke sana.</div>
     ${CONFIG.SHEET_URL
       ? `<a class="btn btn-primary" href="${CONFIG.SHEET_URL}" target="_blank" rel="noopener" style="display:inline-block; text-decoration:none; margin-bottom:20px;">Buka Google Sheet leads</a>`
-      : `<div class="admin-note" style="margin-bottom:20px;">Link Google Sheet belum diisi. Buka file <code>index.html</code>, isi <code>CONFIG.SHEET_URL</code> dengan alamat Google Sheet kamu, lalu upload ulang — tombol "Buka Google Sheet" akan muncul di sini.</div>`}
+      : `<div class="admin-note" style="margin-bottom:20px;">Link Google Sheet belum diisi. Buka file <code>index.html</code>, isi <code>CONFIG.SHEET_URL</code> dengan alamat Google Sheet kamu, lalu upload ulang.</div>`}
     <div class="admin-note">
       <b>Cara memakai Sheet sebagai dashboard:</b><br>
       • Filter kolom <b>Agent</b> untuk melihat lead per advisor.<br>
-      • Filter kolom <b>Priority</b> untuk mendahulukan lead 🔥 HIGH.<br>
-      • Gunakan kolom kosong di kanan (mis. "Status" &amp; "Catatan") untuk mencatat progres follow-up secara manual.<br>
-      • Kolom <b>WhatsApp</b> sudah dalam format 62 — tinggal ketik <code>wa.me/</code> diikuti nomornya di browser untuk membuka chat.
+      • Filter kolom <b>Priority</b> untuk mendahulukan lead HIGH.<br>
+      • Kolom <b>Ada Tanggungan</b> membantumu tahu apakah proteksi jiwa relevan untuk mereka.<br>
+      • Gunakan kolom <b>Status Follow-up</b> &amp; <b>Catatan</b> untuk mencatat progres.<br>
+      • Kolom <b>WhatsApp</b> sudah format 62 — ketik <code>wa.me/</code> diikuti nomornya untuk membuka chat.
     </div>
   `;
 }
